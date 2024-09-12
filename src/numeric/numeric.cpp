@@ -12,7 +12,7 @@ pair<double, int> promedioSumatoria(vector<int> nums){
     for(long unsigned int i=0; i < nums.size(); i++)
         sumatoria += nums[i];
     promedio = sumatoria/nums.size();
-    cout << "\n\nPara el vector " ;
+    cout << "\nPara el vector " ;
     printVector(nums);
     cout << " , la sumatoria de sus números es de " << sumatoria << ", y su promedio es de " << promedio << "\n" << endl;
     return {promedio, sumatoria};
@@ -21,14 +21,14 @@ pair<double, int> promedioSumatoria(vector<int> nums){
 //recibe flotante
 double calcularF(double num){
     double f = (5*num*num) + (1/num);
-    cout << "\nEl resultado de f(" << num << ") es " << f << ".\n\n" << endl;
+    cout << "\nEl resultado de f(" << num << ") es " << f << ".\n" << endl;
     return f;
 }
 
 //recibe entero
 double calcularF(int num){
     double f = (5*num*num) + (1/num);
-    cout << "\nEl resultado de f(" << num << ") es " << f << ".\n\n" << endl;
+    cout << "\nEl resultado de f(" << num << ") es " << f << ".\n" << endl;
     return f;
 }
 
@@ -55,6 +55,7 @@ bool esEntero(string num){
 bool esVectorValido(string nums){
     bool valido = true;
     long unsigned int i = 0;
+    if(!isdigit(nums[nums.length()-1]) || !isdigit(nums[0])) valido = false; 
     while(i < nums.length() && valido){
         if(!isdigit(nums[i])){
             if(nums[i] != ';') valido = false;

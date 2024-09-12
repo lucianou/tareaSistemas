@@ -1,23 +1,28 @@
 # Variables
 CXX = g++
-CXXFLAGS = -std=c++17 -I$(SRCDIR)/numeric -I$(SRCDIR)/text
+CXXFLAGS = -std=c++17 -I$(SRCDIR)/numeric -I$(SRCDIR)/text -I$(SRCDIR)/auth -I$(SRCDIR)/countWord
 OBJDIR = obj
 SRCDIR = src
 TARGET = main
 
-
 # Archivos fuente
 SRCS = $(SRCDIR)/main.cpp \
        $(SRCDIR)/numeric/numeric.cpp \
-       $(SRCDIR)/text/text.cpp
+       $(SRCDIR)/text/text.cpp \
+       $(SRCDIR)/auth/auth.cpp \
+	   $(SRCDIR)/countWord/countWord.cpp
+
 
 # Archivos objeto
 OBJS = $(OBJDIR)/main.o \
        $(OBJDIR)/numeric.o \
-       $(OBJDIR)/text.o
+       $(OBJDIR)/text.o \
+       $(OBJDIR)/auth.o \
+	   $(OBJDIR)/countWord.o
+
 
 # Regla por defecto
-all: clean $(TARGET)
+all: $(OBJDIR) $(TARGET)
 
 # Regla para construir el ejecutable
 $(TARGET): $(OBJS)
@@ -34,16 +39,16 @@ $(OBJDIR)/numeric.o: $(SRCDIR)/numeric/numeric.cpp
 $(OBJDIR)/text.o: $(SRCDIR)/text/text.cpp
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/text/text.cpp -o $@
 
-# Regla para limpiar archivos de construcción
+$(OBJDIR)/auth.o: $(SRCDIR)/auth/auth.cpp
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/auth/auth.cpp -o $@
+
+$(OBJDIR)/countWord.o: $(SRCDIR)/countWord/countWord.cpp
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/countWord/countWord.cpp -o $@
+
 clean:
-	@echo "[CLN] Removing binary files"
-	@rm -f $(TARGET) *.o
-# Regla para crear directorios necesarios
+	@echo "[CLN] Removing binary and object files"
+	@rm -f $(TARGET) $(OBJDIR)/*.o
+
+# Regla para crear directorio de objetos
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
-
-$(BINDIR):
-	mkdir -p $(BINDIR)
-
-# Dependencias
-$(TARGET): $(OBJDIR) 

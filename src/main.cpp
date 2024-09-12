@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <cstdlib>
 #include <vector>
 #include <cstring>
@@ -7,33 +6,21 @@
 #include <string>
 #include "numeric.h"
 #include "text.h"
+#include "auth.h"
+#include "countWord.h"
 
 using namespace std;
 
-void mostrarMenu(string user, string pass, string frase, vector<int> nums, int num, double dnum) {
-	int funcion=0;
+void mostrarMenu(string user, string rol, string frase, vector<int> nums, int num, double dnum, vector<Usuario>& users, string pathDatos) {
+	int funcion=-1;
+    pid_t pid = getpid();
 
-    cout << "\n\nBienvenido/a, " << user << "!!\n" << endl;
-
-    while(funcion != 6){
-        cout << "-------------- [Menú de opciones] -------------\n\n";
-        cout << "	1 : Detección de palíndromo\n";
-        cout << "	2 : Contar vocales\n";
-        cout << "	3 : Cantidad de letras por texto\n";
-        cout << "	4 : Promedio y sumatoria de un vector\n";
-        cout << "	5 : Calcular f(x) = 5x*x + (1/x)\n";
-        cout << "	6 : Salir\n\n";
-        cout << "----------------------------------------\n\n";
-
-        cout << "Ingrese función a realizar (1-6): ";
-        cin >> funcion;
-        while(cin.fail() || funcion <=0 || funcion>6 ){
-            if(funcion <=0 || funcion>6)
-                cout << "Error: Ingrese un número válido entre 1 y 6: ";
-            cin.clear();   
-            cin.ignore(1000, '\n'); 
-            cin >> funcion;
-        }
+    while(funcion != 0){
+        cout << "\nSISTEMA @@@@ (PID = " << pid << ")" << endl;
+        cout << "Nombre de Usuario: " << user << endl;
+        cout << "Rol: " << rol << "\n" << endl;
+        cout << "###################################\n";
+        cout << "respuesta de la ejecución:\n";
 
         if(funcion == 1) palindromo(frase);
         else if(funcion == 2) contarVocales(frase);
@@ -42,37 +29,42 @@ void mostrarMenu(string user, string pass, string frase, vector<int> nums, int n
         else if(funcion == 5 && num != 0) calcularF(num);
         else if(funcion == 5 && dnum != 0) calcularF(dnum);
         else if(funcion == 5) cout << "\nEl número 0 no forma parte del dominio de la función. Operación no válida.\n\n";
+        else if(funcion == 6) menuContarPalabras();
+        else if(funcion == 7 && rol == "Admin") ingresarUsuario(users, pathDatos);
+        else if(funcion == 8 && rol == "Admin") listarUsuarios(users);
+        else if(funcion == 9 && rol == "Admin") eliminarUsuarios(users, pathDatos);
+        else cout << "----------------" << endl;
 
-        
-        cin.ignore(); 
-        cout << "Presione Enter para continuar..." << endl;
-        cin.get();
-        cout << '\n';
-    }
+        cout << "###################################\n\n";
 
-    return;
-
-}
-
-pair<string, string> loadEnv(const string& filename) {
-    ifstream file(filename);
-    string line;
-    string user, pass;
-
-    while (getline(file, line)) {
-        auto delimiterPos = line.find('=');
-        string key = line.substr(0, delimiterPos);
-        string value = line.substr(delimiterPos + 1);
-
-        if (key == "USERNAME") {
-            user = limpiaCadena(value);  
-        } else if (key == "PASSWORD") {
-            pass = limpiaCadena(value);  
+        cout << "-------------- [Menú de opciones] -------------\n";
+        cout << "	0 : Salir\n";
+        cout << "	1 : Detección de palíndromo\n";
+        cout << "	2 : Contar vocales\n";
+        cout << "	3 : Cantidad de letras por texto\n";
+        cout << "	4 : Promedio y sumatoria de un vector\n";
+        cout << "	5 : Calcular f(x) = 5x*x + (1/x)\n";
+        cout << "	6 : Contar Palabras\n";
+        if(rol == "Admin"){
+            cout << "	7 : Ingresar Usuarios\n";
+            cout << "	8 : Listar Usuarios\n";
+            cout << "	9 : Eliminar Usuarios\n";
         }
-    }
+        cout << "------------------------------------------------\n";
 
-    return make_pair(user, pass);
+        cout << "INGRESE OPCIÓN: ";
+        cin >> funcion;
+        while(cin.fail() || funcion <0 || funcion>9 ){
+            if(rol == "Admin") cerr << "ERROR: Ingrese un número válido (0-9): ";
+            else cerr << "ERROR: Ingrese un número válido (0-6): ";
+            cin.clear();   
+            cin.ignore(1000, '\n'); 
+            cin >> funcion;
+        }        
+    }
+    return;
 }
+
 
 int main(int argc, char *argv[]) {
     int opcion;
@@ -81,58 +73,34 @@ int main(int argc, char *argv[]) {
     int num;
     double dnum;
 
-    pair<string, string> env = loadEnv(".env");
-    string envUser = env.first;
-    string envPass = env.second;
-
+    string pathDatos = leerEnv(".env");
+    vector<Usuario> users = leerUsuarios(pathDatos);
+    if(users.empty()) return 1;
+    string username;
+    string pass;
     
     if (argc != 11) {
         cerr << "Error: Ingrese todos los parámetros necesarios. La entrada debería ser ./trabajo1 -u nombre -p contraseña -t frase -v vector -n numero\n";
         return 0;
     }
 
-
     while ((opcion = getopt(argc, argv, "u:p:t:v:n:")) != -1) {
         switch (opcion) {
             case 'u':
-				if (optarg == nullptr || optarg[0] == '-')  {
-                    cerr << "Error: Ingrese un username válido para -u. Este no puede ser nulo.\n";
+				if(!usernameValido(optarg)){
                     return 1;
                 }
-                else if(strlen(optarg) < 3){
-                    cerr << "Error: Ingrese un username válido para -u. Este debe contener al menos 3 caracteres.\n";
-                    return 1;
-                }
-                else if(!esAlfabeto(optarg)){
-                    cerr << "Error: Ingrese un username válido para -u. Este solo debe contener letras.\n";
-                    return 1;
-                }
-                else if(optarg != envUser) {
-                    cerr << "Error: Los datos de usuario son incorrectos.\n";
-                    return 1;
-                }
+                username = optarg;
                 break;
             case 'p':
-				if (optarg == nullptr || optarg[0] == '-') {
-                    cerr << "Error: Ingrese una contraseña válida para -p. Esta no puede ser nula.\n";
+                if(!passValida(optarg)){
                     return 1;
                 }
-                else if(strlen(optarg) < 6){
-                    cerr << "Error: Ingrese una contraseña válida para -p. Esta debe contener al menos 6 caracteres.\n";
-                    return 1;
-                }
-                else if(!esAlfanumerico(optarg)){
-                    cerr << "Error: Ingrese una contraseña válida para -p. Esta solo puede contener letras y numeros.\n";
-                    return 1;
-                }
-                else if(optarg != envPass) {
-                    cerr << "Error: Los datos de usuario son incorrectos.\n";
-                    return 1;
-                }
+                pass = optarg;
                 break;
             case 't':
 				if (optarg == nullptr || optarg[0] == '-') {
-                    cerr << "Error: Ingrese una frase válida para -t.\n";
+                    cerr << "Error: Ingrese una frase válida no nula para -t.\n";
                     return 1;
                 }
 				frase = optarg;
@@ -159,8 +127,15 @@ int main(int argc, char *argv[]) {
                 return 1;
         }
     }
+    
+    int userIndex = usuarioValido(users, username, pass);
+    if(userIndex == -1) {
+        cerr << "Error: Los datos de usuario son incorrectos.\n";
+        return 1;
+    }
 
-    mostrarMenu(envUser, envPass, frase, numeros, num, dnum);
+
+    mostrarMenu(username, users[userIndex].rol, frase, numeros, num, dnum, users, pathDatos);
     cout << "-------------- [Saliendo...] ---------------" << endl;
     return 1;
 }
