@@ -1,22 +1,21 @@
-#include "countWord.h"
+#include "menu.h"
+#include "readFile.h"
 
-namespace fs = std::filesystem;
-using namespace std;
 
-void menuContarPalabras() {
+void mostrarMenuPCW() {
     string extension, inputPath, outputPath;
     bool extensionSet = false, inputPathSet = false, outputPathSet = false;
     int opcion;
 
     while (true) {
-        cout << "\n------- [Programa contador de palabras] -------\n\n";
+        cout << "------- [Programa contador de palabras] -------\n\n";
         cout << "pid: " << getpid() << "\n";
         cout << "(0) Salir\n";
         cout << "(1) Extensión de archivos a procesar (ej: txt)\n";
         cout << "(2) Path de carpeta a procesar (ej: /home/lvc/in)\n";
         cout << "(3) Path de carpeta que contendrá la respuesta del proceso (ej: /home/lvc/out)\n";
-        cout << "(4) Procesar\n\n";
-        cout << "Seleccione la opción: ";
+        cout << "(4) Procesar\n";
+        cout << "Seleccione la opción:";
         cin >> opcion;
         cout << "\n";
         cout << "-----------------------------------------------\n\n";
@@ -32,10 +31,8 @@ void menuContarPalabras() {
             outputPathSet = fs::exists(outputPath);
         } else if (opcion == 4) {
             if (extensionSet && inputPathSet && outputPathSet) {
-                // Llamar a la función de procesamiento aquí
-                // procesarArchivos(extension, inputPath, outputPath);
+                procesarArchivos(extension, inputPath, outputPath);
                 cout << "Procesando archivos...\n";
-                // Aquí agregar la lógica para procesar los archivos
             } else {
                 cerr << "Error: Debe ingresar todos los datos necesarios antes de procesar.\n";
             }
@@ -77,7 +74,6 @@ void procesarArchivos(const string& extension, const string& inputPath, const st
             string archivoEntrada = entry.path().string();
             string archivoSalida = (fs::path(outputPath) / entry.path().stem()).string() + ".txt";
             
-            // Contar palabras en el archivo de entrada
             map<string, int> conteoPalabras = contarPalabras(archivoEntrada);
 
             // Crear archivo de salida
@@ -86,8 +82,7 @@ void procesarArchivos(const string& extension, const string& inputPath, const st
                 cerr << "Error: No se pudo crear el archivo de salida " << archivoSalida << ".\n";
                 continue;
             }
-
-            // Escribir el conteo de palabras en el archivo de salida
+            
             for (const auto& [palabra, cantidad] : conteoPalabras) {
                 fileSalida << palabra << "; " << cantidad << "\n";
             }
@@ -96,25 +91,4 @@ void procesarArchivos(const string& extension, const string& inputPath, const st
             cout << "Archivo procesado: " << archivoSalida << "\n";
         }
     }
-}
-
-// Función para contar la frecuencia de cada palabra en un archivo
-map<string, int> contarPalabras(const string& archivo) {
-    ifstream file(archivo);  // Abrir el archivo
-    map<string, int> conteoPalabras;  // Mapa para almacenar la frecuencia de palabras
-    string palabra;  // Variable para leer cada palabra del archivo
-
-    if (!file.is_open()) {  // Comprobar si el archivo se abrió correctamente
-        cerr << "No se pudo abrir el archivo.\n";
-        return conteoPalabras;  // Devolver el mapa vacío
-    }
-
-    while (file >> palabra) {  // Leer cada palabra del archivo
-        // Convertir la palabra a minúsculas para uniformidad
-        transform(palabra.begin(), palabra.end(), palabra.begin(), ::tolower);
-        conteoPalabras[palabra]++;  // Incrementar la cuenta de la palabra en el mapa
-    }
-
-    file.close();  // Cerrar el archivo
-    return conteoPalabras;  // Devolver el mapa con el conteo de palabras
 }

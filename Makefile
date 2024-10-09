@@ -1,54 +1,43 @@
 # Variables
 CXX = g++
-CXXFLAGS = -std=c++17 -I$(SRCDIR)/numeric -I$(SRCDIR)/text -I$(SRCDIR)/auth -I$(SRCDIR)/countWord
+CXXFLAGS = -std=c++17 -I$(SRCDIR)/numeric -I$(SRCDIR)/text -I$(SRCDIR)/auth
 OBJDIR = obj
+BINDIR = bin
 SRCDIR = src
-TARGET = main
+TARGETS = $(BINDIR)/main
 
 # Archivos fuente
 SRCS = $(SRCDIR)/main.cpp \
        $(SRCDIR)/numeric/numeric.cpp \
        $(SRCDIR)/text/text.cpp \
-       $(SRCDIR)/auth/auth.cpp \
-	   $(SRCDIR)/countWord/countWord.cpp
+       $(SRCDIR)/auth/auth.cpp
 
-
-# Archivos objeto
-OBJS = $(OBJDIR)/main.o \
-       $(OBJDIR)/numeric.o \
-       $(OBJDIR)/text.o \
-       $(OBJDIR)/auth.o \
-	   $(OBJDIR)/countWord.o
-
+# Archivos objeto (asegurándonos de que se coloquen correctamente en subdirectorios)
+OBJS_MAIN = $(OBJDIR)/main.o \
+            $(OBJDIR)/numeric/numeric.o \
+            $(OBJDIR)/text/text.o \
+            $(OBJDIR)/auth/auth.o
 
 # Regla por defecto
-all: $(OBJDIR) $(TARGET)
+all: $(BINDIR) $(OBJDIR) $(TARGETS)
 
-# Regla para construir el ejecutable
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJS)
+# Regla para crear el ejecutable 'main'
+$(BINDIR)/main: $(OBJS_MAIN)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJS_MAIN)
 
-# Regla para compilar archivos fuente en objetos
+# Reglas para compilar archivos fuente en objetos
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
+	@mkdir -p $(dir $@) # Crear el subdirectorio en obj si no existe
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Regla para compilar archivos fuente en objetos dentro de subdirectorios
-$(OBJDIR)/numeric.o: $(SRCDIR)/numeric/numeric.cpp
-	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/numeric/numeric.cpp -o $@
-
-$(OBJDIR)/text.o: $(SRCDIR)/text/text.cpp
-	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/text/text.cpp -o $@
-
-$(OBJDIR)/auth.o: $(SRCDIR)/auth/auth.cpp
-	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/auth/auth.cpp -o $@
-
-$(OBJDIR)/countWord.o: $(SRCDIR)/countWord/countWord.cpp
-	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/countWord/countWord.cpp -o $@
-
+# Limpiar archivos generados
 clean:
 	@echo "[CLN] Removing binary and object files"
-	@rm -f $(TARGET) $(OBJDIR)/*.o
+	@rm -rf $(BINDIR)/* $(OBJDIR)/*
 
-# Regla para crear directorio de objetos
+# Reglas para crear directorios si no existen
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
+
+$(BINDIR):
+	mkdir -p $(BINDIR)
