@@ -12,7 +12,7 @@
 
 using namespace std;
 
-void mostrarMenu(string user, string rol, string frase, vector<int> nums, int num, double dnum, vector<Usuario>& users, string pathDatos) {
+void mostrarMenu(string user, string rol, string frase, vector<int> nums, int num, double dnum, vector<Usuario>& users, vector<string> entorno) {
     int funcion = -1;
     pid_t pid = getpid();  // Obtener el PID del proceso padre
 
@@ -42,11 +42,11 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
         } else if (funcion == 6) {
             int result = system("./src/programCountWord/main");
         } else if (funcion == 7 && rol == "Admin") {
-            ingresarUsuario(users, pathDatos);
+            ingresarUsuario(users, entorno[0]);
         } else if (funcion == 8 && rol == "Admin") {
             listarUsuarios(users);
         } else if (funcion == 9 && rol == "Admin") {
-            eliminarUsuarios(users, pathDatos);
+            eliminarUsuarios(users, entorno[0]);
         } else {
             cout << "----------------" << endl;
         }
@@ -88,8 +88,9 @@ int main(int argc, char *argv[]) {
     int num;
     double dnum;
 
-    string pathDatos = leerEnv(".env");
-    vector<Usuario> users = leerUsuarios(pathDatos);
+    vector<string> entorno = leerEnv(".env");
+    cout << entorno[0] << endl;
+    vector<Usuario> users = leerUsuarios(entorno[0]);
     if (users.empty()) return 1;
     string username;
     string pass;
@@ -149,7 +150,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    mostrarMenu(username, users[userIndex].rol, frase, numeros, num, dnum, users, pathDatos);
+    mostrarMenu(username, users[userIndex].rol, frase, numeros, num, dnum, users, entorno);
     cout << "----------------- [Saliendo...] ----------------" << endl;
     return 1;
 }

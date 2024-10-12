@@ -11,7 +11,7 @@ struct Usuario {
     string rol;
 };
 
-string leerEnv(const string& filename);
+vector<string> leerEnv(const string& filename);
 vector<Usuario> leerUsuarios(const string& nombreArchivo);
 bool usernameValido(string user);
 bool passValida(string pass);

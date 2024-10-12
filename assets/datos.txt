@@ -1,12 +1,12 @@
-luciano(1); hola123(1); Admin(1)
-perro(2); 654321(2); Usuario Genérico(2)
-gato(3); 654321(3); Usuario Genérico(3)
-juana(4); holi33(4); Admin(4)
-uuussa(5); holas3(5); Admin(5)
-juanooo(6); hola22(6); Admin(6)
-frederick(7); 788887(7); Admin(7)
-ursulo(8); 89hhjs(8); Usuario Genérico(8)
-Mario(9); 1978ma(9); Admin(9)
-pedrito(10); hola1234(10); Usuario Genérico(10)
-ayayai(11); 4445235(11); Admin(11)
-lucianito(12); hola88(12); Admin(12)
+luciano; hola123; Admin
+perro; 654321; Usuario Genérico
+gato; 654321; Usuario Genérico
+juana; holi33; Admin
+uuussa; holas3; Admin
+juanooo; hola22; Admin
+frederick; 788887; Admin
+ursulo; 89hhjs; Usuario Genérico
+Mario; 1978ma; Admin
+pedrito; hola1234; Usuario Genérico
+ayayai; 4445235; Admin
+lucianito; hola88; Admin

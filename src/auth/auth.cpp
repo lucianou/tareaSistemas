@@ -8,29 +8,33 @@
 
 using namespace std;
 
-string leerEnv(const string& filename) {
+vector<string> leerEnv(const string& filename) {
     ifstream file(filename);
     string line;
-    string pathDatos;
+    vector<string> entorno(5);
+    int i=0;
 
     while (getline(file, line)) {
         auto delimiterPos = line.find('=');
         string key = line.substr(0, delimiterPos);
         string value = line.substr(delimiterPos + 1);
 
-        if (key == "PATH_DATOS") {
-            pathDatos = value;  
-        }
+        entorno[i] = value;
+        cout << entorno.size() << ", " << entorno[i] << endl;
+        i++;
+
     }
-    return pathDatos;
+    return entorno;
 }
 
 vector<Usuario> leerUsuarios(const string& nombreArchivo) {
     vector<Usuario> usuarios;
-    ifstream archivo(nombreArchivo);
+    cout << nombreArchivo.find(" ") << endl;
+    string archivoName = nombreArchivo;
+    cout << archivoName << endl;
+    ifstream archivo(archivoName);
     string linea;
     int indice = 1;
-    int posPar;
     int posPC;
     string par;
 
@@ -43,41 +47,23 @@ vector<Usuario> leerUsuarios(const string& nombreArchivo) {
         istringstream ss(linea);
         Usuario usuario;
         string temp;
-        par = "(" + to_string(indice) + ")";
         
         // Leer nombre de usuario
         getline(ss, usuario.user, ';');
         // Eliminar posibles espacios en blanco
         usuario.user.erase(0, usuario.user.find_first_not_of(" "));
         usuario.user.erase(usuario.user.find_last_not_of(" ") + 1);
-        posPar = usuario.user.find(par);
-        if(posPar == std::string::npos){
-            cerr << "ERROR: falla en el formato de datos.txt, no calzan los paréntensis." << endl;
-            return vector<Usuario>();
-        }        
-        usuario.user.erase(posPar, usuario.user.length()-1);
 
         // Leer contraseña
         getline(ss, usuario.pass, ';');
         usuario.pass.erase(0, usuario.pass.find_first_not_of(" "));
         usuario.pass.erase(usuario.pass.find_last_not_of(" ") + 1);
-        posPar = usuario.pass.find(par);
-        if(posPar == std::string::npos){
-            cerr << "ERROR: falla en el formato de datos.txt, no calzan los paréntensis." << endl;
-            return vector<Usuario>();
-        }        
-        usuario.pass.erase(posPar, usuario.pass.length()-1);
 
         // Leer rol
         getline(ss, usuario.rol, ';');
         usuario.rol.erase(0, usuario.rol.find_first_not_of(" "));
         usuario.rol.erase(usuario.rol.find_last_not_of(" ") + 1);
-        posPar = usuario.rol.find(par);
-        if(posPar == std::string::npos){
-            cerr << "ERROR: falla en el formato de datos.txt, no calzan los paréntensis." << endl;
-            return vector<Usuario>();
-        }        
-        usuario.rol.erase(posPar, usuario.rol.length()-1);
+        
         if(usuario.rol != "Admin" && usuario.rol != "Usuario Genérico") {
             cerr << "ERROR: falla en el formato de datos.txt, rol no válido." << endl;
             return vector<Usuario>();
@@ -176,14 +162,13 @@ void ingresarUsuario(vector<Usuario>& users, string path){
             cin >> rol;
             if(rol == 0) return;
         }
-    int ln = contarLineas(path)+1;
     archivo << endl;
     if(rol == 1){
-        archivo <<  username << "(" << ln << "); " << pass << "(" << ln << "); Admin(" << ln << ")";
+        archivo <<  username << "; " << pass << "; Admin";
         usuario.rol = "Admin";
     }
     else{
-        archivo <<  username << "(" << ln << "); " << pass << "(" << ln << "); Usuario Genérico(" << ln << ")";
+        archivo <<  username << "; " << pass << "; Usuario Genérico";
         usuario.rol = "Usuario Genérico";
     }    
     cout << "Datos escritos en el archivo correctamente.\n" << endl;
@@ -222,14 +207,19 @@ void eliminarUsuarios(vector<Usuario>& users, string path){
         std::cerr << "No se pudo abrir uno de los archivos." << std::endl;
         return;
     }
-
-    cout << "Ingrese usuario que desea borrar: ";
+    listarUsuarios(users);
+    cout << "\nIngrese índice del usuario que desea borrar: ";
     cin >> usuarioBorrar;
     while(usuarioBorrar-1<1 || usuarioBorrar-1>users.size() || users[usuarioBorrar-1].rol == "Admin"){
         cin.clear();   
         if(users[usuarioBorrar-1].rol == "Admin") cerr << "ERROR: No puede borrar usuario del tipo Admin, ingrese un Usuario Genérico: ";
-        else cerr << "ERROR: Ingrese un usuario existente: ";
-        cin >> usuarioBorrar;
+        else if (usuarioBorrar<=0 && usuarioBorrar>users.size()){
+            cerr << "ERROR: Ingrese un usuario existente: ";
+            cin >> usuarioBorrar;
+        } else{
+            cerr << "ERROR: Ingrese un índice de usuario existente: ";
+            cin >> usuarioBorrar;
+        }
     }
     usuarioBorrar--;
     string linea;
@@ -245,6 +235,7 @@ void eliminarUsuarios(vector<Usuario>& users, string path){
     }
     archivoOriginal.close();
     archivoTemporal.close();
+    users.erase(users.begin()+usuarioBorrar);
 
     // Reemplazar el archivo original con el archivo temporal
     if (remove(path.c_str()) != 0) {

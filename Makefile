@@ -2,9 +2,9 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -I$(SRCDIR)/numeric -I$(SRCDIR)/text -I$(SRCDIR)/auth
 OBJDIR = obj
-BINDIR = bin
+BINDIR = .
 SRCDIR = src
-TARGETS = $(BINDIR)/main
+TARGETS = main
 
 # Archivos fuente
 SRCS = $(SRCDIR)/main.cpp \
@@ -29,6 +29,9 @@ $(BINDIR)/main: $(OBJS_MAIN)
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@mkdir -p $(dir $@) # Crear el subdirectorio en obj si no existe
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+./main: $(OBJS_MAIN)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJS_MAIN)
 
 # Limpiar archivos generados
 clean:
