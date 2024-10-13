@@ -1,12 +1,4 @@
 luciano; hola123; Admin
-perro; 654321; Usuario Genérico
-gato; 654321; Usuario Genérico
-juana; holi33; Admin
-uuussa; holas3; Admin
-juanooo; hola22; Admin
-frederick; 788887; Admin
-ursulo; 89hhjs; Usuario Genérico
-Mario; 1978ma; Admin
-pedrito; hola1234; Usuario Genérico
-ayayai; 4445235; Admin
-lucianito; hola88; Admin
+perro; perro1; Usuario Genérico
+martina; marti1; Admin
+gato; gatito; Usuario Genérico

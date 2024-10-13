@@ -40,6 +40,7 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
                 cout << "\nEl número 0 no forma parte del dominio de la función. Operación no válida.\n\n";
             }
         } else if (funcion == 6) {
+            string command = "./src/programCountWord/main \"" + entorno[1] + "\""+ entorno[2] + "\""+ entorno[3] + "\""+ entorno[4] + "\""+ entorno[5] + "\""+ entorno[6] + "\"";
             int result = system("./src/programCountWord/main");
         } else if (funcion == 7 && rol == "Admin") {
             ingresarUsuario(users, entorno[0]);

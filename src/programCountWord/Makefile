@@ -1,19 +1,21 @@
 # Variables
 CXX = g++
-CXXFLAGS = -std=c++17 -I$(SRCDIR)/menu -I$(SRCDIR)/readFile 
+CXXFLAGS = -std=c++17 -I$(SRCDIR)/countWord -I$(SRCDIR)/countWordT -I$(SRCDIR)/readFile
 OBJDIR = obj
 SRCDIR = src
 TARGET = main
 
 # Archivos fuente
-SRCS = $(SRCDIR)/main.cpp \
-       $(SRCDIR)/menu/menu.cpp \
-       $(SRCDIR)/readFile/readFile.cpp \
+SRCS =	$(SRCDIR)/main.cpp \
+		$(SRCDIR)/countWord/countWord.cpp \
+		$(SRCDIR)/countWordT/countWordT.cpp \
+		$(SRCDIR)/readFile/readFile.cpp \
 
 # Archivos objeto
-OBJS = $(OBJDIR)/main.o \
-       $(OBJDIR)/menu.o \
-       $(OBJDIR)/readFile.o \
+OBJS =	$(OBJDIR)/main.o \
+		$(OBJDIR)/countWord.o \
+		$(OBJDIR)/countWordT.o \
+		$(OBJDIR)/readFile.o \
 
 # Regla por defecto
 all: $(OBJDIR) $(TARGET)
@@ -27,8 +29,11 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Regla para compilar archivos fuente en objetos dentro de subdirectorios
-$(OBJDIR)/menu.o: $(SRCDIR)/menu/menu.cpp
-	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/menu/menu.cpp -o $@
+$(OBJDIR)/countWord.o: $(SRCDIR)/countWord/countWord.cpp
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/countWord/countWord.cpp -o $@
+
+$(OBJDIR)/countWordT.o: $(SRCDIR)/countWordT/countWordT.cpp
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/countWordT/countWordT.cpp -o $@
 
 $(OBJDIR)/readFile.o: $(SRCDIR)/readFile/readFile.cpp
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/readFile/readFile.cpp -o $@
