@@ -12,7 +12,7 @@
 
 using namespace std;
 
-void mostrarMenu(string user, string rol, string frase, vector<int> nums, int num, double dnum, vector<Usuario>& users, vector<string> entorno) {
+void mostrarMenu(string user, string rol, string frase, vector<int> nums, int num, double dnum, vector<Usuario>& users, vector<string>& entorno) {
     int funcion = -1;
     pid_t pid = getpid();  // Obtener el PID del proceso padre
 
@@ -89,7 +89,6 @@ int main(int argc, char *argv[]) {
     double dnum;
 
     vector<string> entorno = leerEnv(".env");
-    cout << entorno[0] << endl;
     vector<Usuario> users = leerUsuarios(entorno[0]);
     if (users.empty()) return 1;
     string username;

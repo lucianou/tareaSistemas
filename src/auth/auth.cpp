@@ -1,6 +1,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <algorithm>  // Necesario para std::remove_if
 #include <sstream>
 #include "auth.h"
 #include "text.h"
@@ -11,27 +12,22 @@ using namespace std;
 vector<string> leerEnv(const string& filename) {
     ifstream file(filename);
     string line;
-    vector<string> entorno(5);
-    int i=0;
+    vector<string> entorno;
 
     while (getline(file, line)) {
         auto delimiterPos = line.find('=');
         string key = line.substr(0, delimiterPos);
         string value = line.substr(delimiterPos + 1);
-
-        entorno[i] = value;
-        cout << entorno.size() << ", " << entorno[i] << endl;
-        i++;
-
+        value.erase(std::remove_if(value.begin(), value.end(), ::isspace), value.end());
+        entorno.push_back(value);
     }
     return entorno;
 }
 
 vector<Usuario> leerUsuarios(const string& nombreArchivo) {
     vector<Usuario> usuarios;
-    cout << nombreArchivo.find(" ") << endl;
+
     string archivoName = nombreArchivo;
-    cout << archivoName << endl;
     ifstream archivo(archivoName);
     string linea;
     int indice = 1;
