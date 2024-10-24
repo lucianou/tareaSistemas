@@ -4,6 +4,7 @@ CXXFLAGS = -std=c++17 -I$(SRCDIR)/countWord -I$(SRCDIR)/countWordT -I$(SRCDIR)/r
 OBJDIR = obj
 SRCDIR = src
 TARGET = main
+LDFLAGS = -lpthread   # Añadir el flag para vincular pthread
 
 # Archivos fuente
 SRCS =	$(SRCDIR)/main.cpp \
@@ -22,7 +23,7 @@ all: $(OBJDIR) $(TARGET)
 
 # Regla para construir el ejecutable
 $(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(LDFLAGS)   # Vincular pthread aquí
 
 # Regla para compilar archivos fuente en objetos
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
@@ -38,6 +39,7 @@ $(OBJDIR)/countWordT.o: $(SRCDIR)/countWordT/countWordT.cpp
 $(OBJDIR)/readFile.o: $(SRCDIR)/readFile/readFile.cpp
 	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/readFile/readFile.cpp -o $@
 
+# Limpieza de archivos binarios y objeto
 clean:
 	@echo "[CLN] Removing binary and object files"
 	@rm -f $(TARGET) $(OBJDIR)/*.o

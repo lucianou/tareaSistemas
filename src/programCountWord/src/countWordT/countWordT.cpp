@@ -1,43 +1,184 @@
 #include "countWordT.h"
 
-void menuCWT(){
-    int opcion;
+mutex coutMutex;                // Mutex para proteger la impresión en consola
+atomic<int> totalPalabras(0);   // Contador atómico para las palabras
 
+bool menuCWT( string extension, string pathEntrada, string pathSalida, string cantidadThreadsStr, string mapPath, string stopPath){
+    int opcion;
+    // Convertir cantidadThreads a entero
+    int cantidadThreads = !cantidadThreadsStr.empty() ? stoi(cantidadThreadsStr) : 1; 
+    // Valor predeterminado 1 si no se encuentra
     while (true) {
-        cout << "------- [Programa contador de palabras] -------\n\n";
-        cout << "------------------ [Threads] ------------------\n\n";
-        cout << "(0) Salir\n";
-        cout << "(1) Extensión del archivo a procesar\n";
-        cout << "(2) Path de carpeta de entrada\n";
-        cout << "(3) Path de carpeta de salida\n";
-        cout << "(4) Procesar\n";
-        cout << "Seleccione la opción:";
+        cout << "------------------ [Contador de palabras con Threads] ------------------\n";
+        cout << "   0 : Salir\n";
+        cout << "   1 : Procesar\n";
+        cout << "-----------------------------------------------\n";
+        cout << "INGRESE OPCIÓN: ";
         cin >> opcion;
         cout << "\n";
-        cout << "-----------------------------------------------\n\n";
 
+        cout << "-----------------------------------------------\n";
+        cout << "\n";
         if (opcion == 1) {
-            // solicitar extension
-        } else if (opcion == 2) {
-            // solicitar Path de carpeta input
-        } else if (opcion == 3) {
-            // solicitar Path de carpeta output
-        } else if (opcion == 4) {
-           // procesar archivos
+            if (!pathEntrada.empty() && !pathSalida.empty() && !extension.empty()) {
+                procesarArchivos(pathEntrada, pathSalida, extension, cantidadThreads, mapPath);
+                return true;
+            } else {
+                cerr << "Error: No se pudo obtener las variables necesarias.\n";
+                return false;
+            }
         } else if (opcion == 0) {
-            return;
+            return false;
         } else {
             cerr << "Opción no válida. Intente nuevamente.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
     }
 }
 
-void countWordThreads(const vector<string>& archivos, int cantidadThreads) {
-    // Contar palabras con threads
+vector<string> cargarArchivos(const string& directorio, const string& extension, string mapPath) {
+    vector<string> archivos;
+    cout << directorio << endl;
+    // Verificar si el directorio existe
+    if (!fs::exists(directorio) || !fs::is_directory(directorio)) {
+        cerr << "Error: El directorio no existe o no es un directorio válido.\n";
+        return archivos; // Regresa un vector vacío
+    }
+
+    // Iterar sobre los archivos en el directorio
+    for (const auto& entry : fs::directory_iterator(directorio)) {
+        if (entry.is_regular_file() && entry.path().extension() == "." + extension) {
+            archivos.push_back(entry.path().string()); // Agregar el archivo al vector
+        }
+    }
+    crearMap(extension, directorio, mapPath,archivos);
+
+    // Mostrar la lista de archivos cargados (opcional)
+    cout << "Archivos cargados con extensión '" << extension << "':\n";
+    for (const auto& archivo : archivos) {
+        cout << " - " << archivo << '\n';
+    }
+
+    return archivos;
 }
 
-vector<string> cargarArchivos(const string& directorio, const string& extension) {
-    vector<string> archivos;
-    // Cargar archivos con extension
-    return archivos;
+void crearMap(string extension, string entradaPath, string mapPath, vector<string> archivos){
+    string archivoMap = mapPath + "/map." + extension;
+    ofstream outputFile(archivoMap);
+    if (!outputFile) {
+        cerr << "Error al crear el archivo de salida: " << archivoMap << endl;
+        return;
+    }
+    string nombre;
+    for(int i = 0; i<archivos.size() ; i++){
+        nombre = archivos[i].erase(0, entradaPath.length()+1);
+        nombre = archivos[i].erase(archivos[i].length()-extension.length()-1, extension.length()+1);
+        outputFile << nombre << ", " << i << "\n";
+    }
+    outputFile.close();
+
+}
+
+
+
+// Función para contar palabras en un archivo
+void contarPalabrasEnArchivo(const string& archivo, const string& pathSalida, string extension) {
+    ifstream inputFile(archivo);
+    if (!inputFile) {
+        cerr << "Error al abrir el archivo: " << archivo << endl;
+        return;
+    }
+
+    // Crear el archivo de salida
+    string archivoSalida = (fs::path(pathSalida) / fs::path(archivo).stem()).string() + "."+ extension;
+    ofstream outputFile(archivoSalida);
+    if (!outputFile) {
+        cerr << "Error al crear el archivo de salida: " << archivoSalida << endl;
+        return;
+    }
+
+    // Mapa para almacenar las palabras y su cantidad
+    map<string, int> contadorPalabras;
+
+    string linea;
+    // Leer cada línea del archivo
+    while (getline(inputFile, linea)) {
+        istringstream iss(linea);
+        string palabra;
+
+        // Leer cada palabra de la línea y contarla
+        while (iss >> palabra) {
+            //palabra.erase(std::remove_if(palabra.begin(), palabra.end(), ::ispunct), palabra.end());
+            palabra = limpiarPalabra(palabra);
+            contadorPalabras[palabra]++;
+        }
+    }
+
+    inputFile.close();
+
+    // Escribir el conteo de palabras en el archivo de salida
+    for (const auto& [palabra, cantidad] : contadorPalabras) {
+        outputFile << palabra << "; " << cantidad << "\n";
+    }
+
+    outputFile.close();
+
+    {
+        lock_guard<mutex> guard(coutMutex);
+        cout << "Archivo: " << archivo << " tiene " << contadorPalabras.size() << " palabras únicas.\n";
+    }
+}
+
+// Función principal para contar palabras utilizando threads
+void countWordThreads(const vector<string>& archivos, int cantidadThreads, const string& pathSalida, string extension) {
+    vector<thread> threads;
+    for (const auto& archivo : archivos) {
+        // Usamos una lambda para pasar correctamente los parámetros a la función
+        threads.emplace_back([&archivo, &pathSalida, extension]() {
+            contarPalabrasEnArchivo(archivo, pathSalida, extension);
+        });
+
+        if (threads.size() >= cantidadThreads) {
+            for (auto& th : threads) {
+                th.join(); // Esperar a que el thread termine
+            }
+            threads.clear(); // Limpiar el vector de threads
+        }
+    }
+
+    // Unir los threads restantes que no se han unido todavía
+    for (auto& th : threads) {
+        th.join();
+    }
+
+    cout << "Total de palabras en todos los archivos: " << totalPalabras.load() << endl;
+}
+
+
+void procesarArchivos(const string& inputPath, const string& outputPath, const string& extension, int cantidadThreads, string mapPath) {
+    vector<string> archivos = cargarArchivos(inputPath, extension, mapPath);
+    if (archivos.empty()) {
+        cerr << "No se encontraron archivos con la extensión '" << extension << "' en el directorio '" << inputPath << "'.\n";
+        return;
+    }
+    
+    // Procesar los archivos con la función de threads
+    countWordThreads(archivos, cantidadThreads, outputPath, extension); // Pasamos también el path de salida
+}
+
+string limpiarPalabra(const std::string& palabra) {
+    string limpia = palabra;
+    
+    // Eliminar puntuación al inicio (incluye ¿ y ¡)
+    limpia.erase(limpia.begin(), std::find_if(limpia.begin(), limpia.end(), [](unsigned char ch) {
+        return !ispunct(ch) && ch != '¡' && ch != '¿';
+    }));
+
+    // Eliminar puntuación al final (incluye ? y !)
+    limpia.erase(std::find_if(limpia.rbegin(), limpia.rend(), [](unsigned char ch) {
+        return !std::ispunct(ch) && ch != '!' && ch != '?';
+    }).base(), limpia.end());
+
+    return limpia;
 }

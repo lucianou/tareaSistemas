@@ -31,7 +31,7 @@ void menuCWL() {
             outputPathSet = fs::exists(outputPath);
         } else if (opcion == 4) {
             if (extensionSet && inputPathSet && outputPathSet) {
-                procesarArchivos(extension, inputPath, outputPath);
+                //procesarArchivos(extension, inputPath, outputPath);
                 cout << "Procesando archivos...\n";
             } else {
                 cerr << "Error: Debe ingresar todos los datos necesarios antes de procesar.\n";
@@ -65,30 +65,5 @@ void solicitarPathSalida(string &outputPath) {
     if (!fs::exists(outputPath)) {
         cout << "La carpeta de salida no existe. Se creará una nueva carpeta.\n";
         fs::create_directory(outputPath);
-    }
-}
-
-void procesarArchivos(const string& extension, const string& inputPath, const string& outputPath) {
-    for (const auto& entry : fs::directory_iterator(inputPath)) {
-        if (entry.is_regular_file() && entry.path().extension() == "." + extension) {
-            string archivoEntrada = entry.path().string();
-            string archivoSalida = (fs::path(outputPath) / entry.path().stem()).string() + ".txt";
-            
-            map<string, int> conteoPalabras = contarPalabras(archivoEntrada);
-
-            // Crear archivo de salida
-            ofstream fileSalida(archivoSalida);
-            if (!fileSalida.is_open()) {
-                cerr << "Error: No se pudo crear el archivo de salida " << archivoSalida << ".\n";
-                continue;
-            }
-            
-            for (const auto& [palabra, cantidad] : conteoPalabras) {
-                fileSalida << palabra << "; " << cantidad << "\n";
-            }
-
-            fileSalida.close();
-            cout << "Archivo procesado: " << archivoSalida << "\n";
-        }
     }
 }

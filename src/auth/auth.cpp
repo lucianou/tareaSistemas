@@ -206,7 +206,7 @@ void eliminarUsuarios(vector<Usuario>& users, string path){
     listarUsuarios(users);
     cout << "\nIngrese índice del usuario que desea borrar (0 para cancelar): ";
     cin >> usuarioBorrar;
-    while(usuarioBorrar<0 || usuarioBorrar>users.size() || users[usuarioBorrar-1].rol == "Admin"){
+    while(cin.fail() || usuarioBorrar<0 || usuarioBorrar>users.size() || users[usuarioBorrar-1].rol == "Admin"){
         cin.clear();
         cin.ignore(1000, '\n');  
         if(users[usuarioBorrar-1].rol == "Admin") cerr << "ERROR: No puede borrar usuario del tipo Admin, ingrese un Usuario Genérico: ";
