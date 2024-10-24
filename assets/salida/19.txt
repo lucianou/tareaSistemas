@@ -10694,7 +10694,7 @@ gateaban; 1
 gatear; 1
 gateó; 1
 gatillo; 3
-gato; 2
+gato; 1
 gatos; 3
 gañido; 1
 gelatina; 2
@@ -14732,8 +14732,7 @@ perrera; 3
 perrillo; 1
 perrito; 1
 perritos; 1
-perro; 35
-perros; 6
+perro; 10
 perseverar; 1
 persevere; 1
 perseveró; 1

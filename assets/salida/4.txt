@@ -3784,7 +3784,7 @@ gasómetro; 1
 gatas; 1
 gateaba; 1
 gatito; 1
-gato; 4
+gato; 3
 gatos; 2
 gaviotas; 1
 gelatinas; 1
@@ -5559,8 +5559,7 @@ permitían; 3
 pero; 158
 pero,Barroquejón; 1
 perpleja; 1
-perro; 4
-perros; 8
+perros; 2
 perseguido; 1
 perseguirlo; 1
 perseguí; 1

@@ -8630,7 +8630,7 @@ gasolina; 1
 gastaban; 1
 gata; 1
 gatas; 1
-gato; 9
+gato; 5
 gatos; 2
 gel; 1
 gelatina; 2
@@ -12204,7 +12204,7 @@ pero; 601
 perpetua; 3
 perplejidad; 2
 perplejo; 4
-perro; 24
+perro; 5
 persecución; 1
 perseguido; 1
 perseguir; 1

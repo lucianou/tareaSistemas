@@ -8601,7 +8601,7 @@ gastada; 1
 gastados; 1
 gata; 1
 gateando; 1
-gato; 4
+gato; 2
 gatos; 1
 gave; 1
 gaznate; 2
@@ -12279,7 +12279,6 @@ perplejas; 1
 perplejidad; 3
 perplejo; 4
 perplejos; 1
-perro; 4
 persecución; 3
 perseguimos; 1
 perseguiría; 1

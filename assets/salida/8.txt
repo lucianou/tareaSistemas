@@ -9315,7 +9315,6 @@ gastada; 1
 gastado; 2
 gastando; 2
 gatillo; 3
-gato; 1
 gel; 2
 gema; 2
 gemelos; 1
@@ -13257,8 +13256,6 @@ perpetuó; 1
 perpleja; 3
 perplejidad; 4
 perplejo; 8
-perro; 2
-perros; 2
 persecuciones; 1
 perseguidos; 1
 perseguía; 1

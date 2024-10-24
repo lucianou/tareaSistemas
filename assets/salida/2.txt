@@ -3844,7 +3844,7 @@ gastar; 1
 gastaron; 1
 gateando; 1
 gatito; 2
-gato; 2
+gato; 1
 gatos; 3
 gaviota; 3
 generaciones; 2
@@ -5546,8 +5546,7 @@ pero; 163
 perplejidad; 1
 perplejo; 1
 perrito; 1
-perro; 1
-perros; 5
+perros; 1
 perseguidas; 1
 perseguidores; 1
 perseguíamos; 1

@@ -15,13 +15,11 @@ bool menuCWT( string extension, string pathEntrada, string pathSalida, string ca
         cout << "-----------------------------------------------\n";
         cout << "INGRESE OPCIÓN: ";
         cin >> opcion;
-        cout << "\n";
-
         cout << "-----------------------------------------------\n";
         cout << "\n";
         if (opcion == 1) {
             if (!pathEntrada.empty() && !pathSalida.empty() && !extension.empty()) {
-                procesarArchivos(pathEntrada, pathSalida, extension, cantidadThreads, mapPath);
+                procesarArchivos(pathEntrada, pathSalida, extension, cantidadThreads, mapPath, stopPath);
                 return true;
             } else {
                 cerr << "Error: No se pudo obtener las variables necesarias.\n";
@@ -83,7 +81,7 @@ void crearMap(string extension, string entradaPath, string mapPath, vector<strin
 
 
 // Función para contar palabras en un archivo
-void contarPalabrasEnArchivo(const string& archivo, const string& pathSalida, string extension) {
+void contarPalabrasEnArchivo(const string& archivo, const string& pathSalida, string extension, int indice) {
     ifstream inputFile(archivo);
     if (!inputFile) {
         cerr << "Error al abrir el archivo: " << archivo << endl;
@@ -91,7 +89,7 @@ void contarPalabrasEnArchivo(const string& archivo, const string& pathSalida, st
     }
 
     // Crear el archivo de salida
-    string archivoSalida = (fs::path(pathSalida) / fs::path(archivo).stem()).string() + "."+ extension;
+    string archivoSalida = (fs::path(pathSalida) / to_string(indice)).string() + "."+ extension;
     ofstream outputFile(archivoSalida);
     if (!outputFile) {
         cerr << "Error al crear el archivo de salida: " << archivoSalida << endl;
@@ -131,12 +129,15 @@ void contarPalabrasEnArchivo(const string& archivo, const string& pathSalida, st
 }
 
 // Función principal para contar palabras utilizando threads
-void countWordThreads(const vector<string>& archivos, int cantidadThreads, const string& pathSalida, string extension) {
+void countWordThreads(const vector<string>& archivos, int cantidadThreads, const string& pathSalida, string extension, string stopWord) {
     vector<thread> threads;
-    for (const auto& archivo : archivos) {
+    set<string> stopWords = leerPalabras(stopWord);
+    if(stopWords.empty()) cout << "No hay palabras en stopword.txt, se procederá normalmente con el procesamiento." << endl;
+    for (int i = 0; i<archivos.size() ; i++) {
         // Usamos una lambda para pasar correctamente los parámetros a la función
-        threads.emplace_back([&archivo, &pathSalida, extension]() {
-            contarPalabrasEnArchivo(archivo, pathSalida, extension);
+        threads.emplace_back([&archivos, &pathSalida, extension, stopWords, i]() {
+            if(!stopWords.empty()) eliminarPalabras(archivos[i], stopWords);
+            contarPalabrasEnArchivo(archivos[i], pathSalida, extension, i);
         });
 
         if (threads.size() >= cantidadThreads) {
@@ -156,7 +157,7 @@ void countWordThreads(const vector<string>& archivos, int cantidadThreads, const
 }
 
 
-void procesarArchivos(const string& inputPath, const string& outputPath, const string& extension, int cantidadThreads, string mapPath) {
+void procesarArchivos(const string& inputPath, const string& outputPath, const string& extension, int cantidadThreads, string mapPath, string stopPath) {
     vector<string> archivos = cargarArchivos(inputPath, extension, mapPath);
     if (archivos.empty()) {
         cerr << "No se encontraron archivos con la extensión '" << extension << "' en el directorio '" << inputPath << "'.\n";
@@ -164,7 +165,7 @@ void procesarArchivos(const string& inputPath, const string& outputPath, const s
     }
     
     // Procesar los archivos con la función de threads
-    countWordThreads(archivos, cantidadThreads, outputPath, extension); // Pasamos también el path de salida
+    countWordThreads(archivos, cantidadThreads, outputPath, extension, stopPath); // Pasamos también el path de salida
 }
 
 string limpiarPalabra(const std::string& palabra) {
@@ -181,4 +182,54 @@ string limpiarPalabra(const std::string& palabra) {
     }).base(), limpia.end());
 
     return limpia;
+}
+
+set<string> leerPalabras(const string& archivoPalabras) {
+    set<string> palabras;
+    ifstream archivo(archivoPalabras);
+    string palabra;
+
+    if (archivo.is_open()) {
+        while (archivo >> palabra) {
+            palabras.insert(palabra);
+        }
+        archivo.close();
+    } else {
+        cerr << "Error al abrir el archivo de palabras: " << archivoPalabras << endl;
+    }
+
+    return palabras;
+}
+
+// Función para eliminar palabras de un archivo dado
+void eliminarPalabras(const string& archivoObjetivo, const set<string>& palabrasAEliminar) {
+    ifstream archivoEntrada(archivoObjetivo);
+    stringstream buffer;
+    string palabra;
+    string resultado;
+
+    if (archivoEntrada.is_open()) {
+        buffer << archivoEntrada.rdbuf(); // Leemos todo el contenido del archivo
+        archivoEntrada.close();
+    } else {
+        cerr << "Error al abrir el archivo objetivo: " << archivoObjetivo << endl;
+        return;
+    }
+
+    stringstream ss(buffer.str());
+    while (ss >> palabra) {
+        // Si la palabra no está en el conjunto, la añadimos al resultado
+        if (palabrasAEliminar.find(palabra) == palabrasAEliminar.end()) {
+            resultado += palabra + " ";
+        }
+    }
+
+    // Sobreescribimos el archivo con el contenido filtrado
+    ofstream archivoSalida(archivoObjetivo);
+    if (archivoSalida.is_open()) {
+        archivoSalida << resultado;
+        archivoSalida.close();
+    } else {
+        cerr << "Error al sobrescribir el archivo objetivo: " << archivoObjetivo << endl;
+    }
 }

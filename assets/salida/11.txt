@@ -5680,7 +5680,7 @@ gastar; 1
 gata; 9
 gatear; 1
 gatera; 3
-gato; 12
+gato; 5
 gatos; 1
 gemelos; 4
 gemido; 4
@@ -8100,7 +8100,7 @@ perplejidad; 1
 perplejo; 3
 perplejos; 1
 perplejo; 1
-perro; 9
+perro; 1
 persecución; 1
 perseguirlo; 1
 persistía; 1

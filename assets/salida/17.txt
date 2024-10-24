@@ -3590,7 +3590,7 @@ garras; 1
 gastan; 1
 gastos; 2
 gatito; 1
-gato; 4
+gato; 2
 gaviotas; 1
 gemelo; 8
 gemelos; 12
@@ -5311,8 +5311,8 @@ perra; 2
 perrera; 19
 perrita; 1
 perritos; 1
-perro; 7
-perros; 15
+perro; 2
+perros; 4
 perseguido; 1
 perseguidores; 1
 perseguir; 1

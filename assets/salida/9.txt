@@ -9084,7 +9084,7 @@ gateando; 2
 gatearon; 2
 gateó; 2
 gatillo; 3
-gato; 9
+gato; 4
 gatos; 2
 gauntlet; 1
 gemelas; 1
@@ -12768,7 +12768,7 @@ perpetuamente; 2
 perplejidad; 2
 perplejo; 3
 perplejos; 1
-perro; 6
+perro; 2
 persecuciones; 1
 persecución; 4
 perseguido; 3

@@ -15,6 +15,7 @@ using namespace std;
 void mostrarMenu(string user, string rol, string frase, vector<int> nums, int num, double dnum, vector<Usuario>& users, vector<string>& entorno) {
     int funcion = -1;
     pid_t pid = getpid();  // Obtener el PID del proceso padre
+    int exitStatus = 0;
 
     while (funcion != 0) {
         cout << "\nSISTEMA @@@@ (PID = " << pid << ")" << endl;
@@ -40,13 +41,22 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
                 cout << "\nEl número 0 no forma parte del dominio de la función. Operación no válida.\n\n";
             }
         } else if (funcion == 6) {
-            string command = "./src/programCountWord/main " + entorno[1] + " "+ entorno[2] + " "+ entorno[3] + " "+ entorno[4] + " " + entorno[5] + " "+ entorno[6] + " " + entorno[7];
-            int result = system(command.c_str());
-        } else if (funcion == 7 && rol == "Admin") {
-            ingresarUsuario(users, entorno[0]);
+            string commandCountWord = "./src/programCountWord/main " + entorno[1] + " "+ entorno[2] + " "+ entorno[3] + " "+ entorno[4] + " " + entorno[5] + " "+ entorno[6];
+            int result = system(commandCountWord.c_str());
+            if (WIFEXITED(result)) { // Verificamos si el programa terminó correctamente
+                exitStatus = WEXITSTATUS(result);
+            }
+        } else if (funcion == 7) {
+            if(exitStatus != 0){
+                string commandIndex = "./src/creaInvertedIndex/main " + entorno[3] + " " + entorno[7];
+                int result = system(commandIndex.c_str());
+            }
+            else cerr << "ERROR: no se puede crear índice invertido sin haber ejecutado la opción 6." << endl;
         } else if (funcion == 8 && rol == "Admin") {
-            listarUsuarios(users);
+            ingresarUsuario(users, entorno[0]);
         } else if (funcion == 9 && rol == "Admin") {
+            listarUsuarios(users);
+        } else if (funcion == 10 && rol == "Admin") {
             eliminarUsuarios(users, entorno[0]);
         } else {
             cout << "----------------" << endl;
@@ -63,17 +73,18 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
         cout << "    4 : Promedio y sumatoria de un vector\n";
         cout << "    5 : Calcular f(x) = 5x*x + (1/x)\n";
         cout << "    6 : Contar Palabras\n";
+        cout << "    7 : Crea índice invertido." << endl;
         if (rol == "Admin") {
-            cout << "    7 : Ingresar Usuarios\n";
-            cout << "    8 : Listar Usuarios\n";
-            cout << "    9 : Eliminar Usuarios\n";
+            cout << "    8 : Ingresar Usuarios\n";
+            cout << "    9 : Listar Usuarios\n";
+            cout << "    10 : Eliminar Usuarios\n";
         }
         cout << "------------------------------------------------\n";
 
         // Solicitar opción
         cout << "INGRESE OPCIÓN: ";
         cin >> funcion;
-        while (cin.fail() || funcion < 0 || (rol != "Admin" && funcion > 6) || (rol == "Admin" && funcion > 9)) {
+        while (cin.fail() || funcion < 0 || (rol != "Admin" && funcion > 7) || (rol == "Admin" && funcion > 10)) {
             cerr << "ERROR: Ingrese un número válido: ";
             cin.clear();
             cin.ignore(1000, '\n');

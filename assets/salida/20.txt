@@ -10746,7 +10746,7 @@ gastaba; 1
 gastada; 3
 gastado; 1
 gastados; 1
-gato; 16
+gato; 4
 gatos; 5
 gaudifluus; 1
 gavilanes; 3
@@ -15831,8 +15831,8 @@ perplejidad; 2
 perplejo; 7
 perplejos; 1
 perras; 1
-perro; 20
-perros; 21
+perro; 8
+perros; 8
 persas; 1
 persecución; 2
 perseguida; 1

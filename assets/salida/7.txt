@@ -3444,7 +3444,7 @@ gargantas; 1
 garras; 2
 gastado; 1
 gatito; 1
-gato; 10
+gato; 3
 gatos; 2
 gatunos; 1
 gemido; 1
@@ -4979,8 +4979,8 @@ perpleja; 1
 perplejo; 2
 perreras; 1
 perrito; 2
-perro; 5
-perros; 3
+perro; 4
+perros; 1
 persiguiera; 1
 persona; 8
 personaje; 1

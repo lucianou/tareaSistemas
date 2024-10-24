@@ -4700,7 +4700,7 @@ gastadas; 1
 gastado; 1
 gata; 4
 gateando; 2
-gato; 24
+gato; 6
 gatos; 5
 gelatina; 1
 gemelas; 3
@@ -6740,8 +6740,7 @@ permitirán; 1
 permitió; 1
 permitía; 1
 pero; 332
-perro; 30
-perros; 1
+perro; 7
 perro; 1
 perseguido; 1
 perseguirlo; 1

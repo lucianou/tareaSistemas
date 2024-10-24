@@ -3190,7 +3190,6 @@ gastados; 1
 gastos; 1
 gatas; 1
 gateando; 1
-gato; 2
 gemir; 1
 gemía; 1
 general; 5
@@ -4692,7 +4691,7 @@ perpleja; 1
 perplejo; 2
 perplejos; 1
 perrito; 1
-perro; 4
+perro; 1
 perros; 1
 perseguían; 1
 persona; 8

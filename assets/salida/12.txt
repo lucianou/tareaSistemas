@@ -6252,7 +6252,7 @@ gastó; 2
 gata; 2
 gatas; 2
 gateó; 1
-gato; 28
+gato; 9
 gatos; 5
 gato; 1
 gelatina; 2
@@ -8913,8 +8913,8 @@ perorata; 1
 perplejidad; 2
 perplejo; 1
 perrazo; 2
-perro; 47
-perros; 6
+perro; 10
+perros; 4
 persecución; 2
 perseguido; 2
 perseguirlo; 2

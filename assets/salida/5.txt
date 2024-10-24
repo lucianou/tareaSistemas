@@ -3613,7 +3613,7 @@ garrotes; 1
 gasten; 1
 gastos; 1
 gatito; 1
-gato; 18
+gato; 4
 gatos; 8
 gaviotas; 2
 general; 5
@@ -5356,8 +5356,8 @@ permitírsele; 1
 pero; 131
 perpetuos; 1
 perplejidad; 1
-perro; 6
-perros; 6
+perro; 2
+perros; 2
 persecución; 3
 perseguida; 1
 perseguido; 1

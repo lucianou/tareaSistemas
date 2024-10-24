@@ -10732,7 +10732,7 @@ gata; 1
 gatear; 1
 gateó; 1
 gatitos; 3
-gato; 6
+gato; 1
 gatos; 7
 gemela; 1
 gemelo; 3
@@ -14777,8 +14777,7 @@ perpetrado; 1
 perpleja; 2
 perplejo; 11
 perplejos; 1
-perro; 19
-perros; 3
+perro; 2
 persecución; 2
 perseguidos; 1
 perseguía; 3

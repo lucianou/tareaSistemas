@@ -9720,7 +9720,7 @@ gatear; 2
 gateó; 1
 gatito; 1
 gatitos; 1
-gato; 11
+gato; 4
 gatos; 3
 gaveta; 1
 gemela; 1
@@ -13477,7 +13477,7 @@ pero...bueno; 1
 perpleja; 2
 perplejo; 4
 perrdido; 1
-perro; 5
+perro; 1
 perros?-Gritó-Los; 1
 persecución; 5
 perseguido; 3

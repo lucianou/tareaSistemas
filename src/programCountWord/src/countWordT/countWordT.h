@@ -10,6 +10,7 @@
 #include <mutex>
 #include <fstream>
 #include <atomic>
+#include <set>
 #include <filesystem>
 #include <sstream>
 
@@ -22,6 +23,8 @@ vector<string> cargarArchivos(const string& directorio, const string& extension,
 void crearMap(string extension, string entradaPath, string mapPath, vector<string> archivos);
 void contarPalabrasEnArchivo(const string& archivo, const string& pathSalida, string extension);
 void countWordThreads(const vector<string>& archivos, int cantidadThreads, const string& pathSalida, string extension);
-void procesarArchivos(const string& inputPath, const string& outputPath, const string& extension, int cantidadThreads, string mapPath);
+void procesarArchivos(const string& inputPath, const string& outputPath, const string& extension, int cantidadThreads, string mapPath, string stopPath);
 string limpiarPalabra(const string& palabra);
+set<string> leerPalabras(const string& archivoPalabras);
+void eliminarPalabras(const string& archivoObjetivo, const set<string>& palabrasAEliminar);
 #endif 

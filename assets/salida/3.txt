@@ -3805,7 +3805,7 @@ garras; 5
 gas; 1
 gateando; 1
 gatear; 1
-gato; 6
+gato; 2
 gaviotas; 3
 gemido; 1
 gemidos; 1
