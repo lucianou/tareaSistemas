@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import sys
+import getch
 
 def crear_grafico(input_file, output_file):
     try:
@@ -23,7 +24,7 @@ def crear_grafico(input_file, output_file):
     plt.savefig(output_file)
     plt.close()
 
-    print(f"Gráfico guardado como '{output_file}'.")
+    print(f"\n\nGráfico guardado como '{output_file}'.")
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
@@ -32,3 +33,7 @@ if __name__ == "__main__":
         input_file = sys.argv[1]
         output_file = sys.argv[2]
         crear_grafico(input_file, output_file)
+        print("Presiona cualquier tecla para continuar...")
+        getch.getch()
+
+
