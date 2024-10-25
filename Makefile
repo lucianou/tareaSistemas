@@ -36,7 +36,9 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 # Limpiar archivos generados
 clean:
 	@echo "[CLN] Removing binary and object files"
-	@rm -rf $(BINDIR)/* $(OBJDIR)/*
+	@rm -f $(BINDIR)/main  	#Elimina solo el binario
+	@rm -f $(OBJDIR)/*.o    #Elimina solo los archivos .o, no el contenido completo del directorio
+
 
 # Reglas para crear directorios si no existen
 $(OBJDIR):

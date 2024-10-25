@@ -3,41 +3,49 @@
 mutex coutMutex;                // Mutex para proteger la impresión en consola
 atomic<int> totalPalabras(0);   // Contador atómico para las palabras
 
-bool menuCWT( string extension, string pathEntrada, string pathSalida, string cantidadThreadsStr, string mapPath, string stopPath){
+bool menuCWT( string extension, string pathEntrada, string pathSalida, string cantidadThreadsStr, string mapPath, string stopPath, string sinMenu){
     int opcion;
     // Convertir cantidadThreads a entero
     int cantidadThreads = !cantidadThreadsStr.empty() ? stoi(cantidadThreadsStr) : 1; 
     // Valor predeterminado 1 si no se encuentra
-    while (true) {
-        cout << "------------------ [Contador de palabras con Threads] ------------------\n";
-        cout << "   0 : Salir\n";
-        cout << "   1 : Procesar\n";
-        cout << "-----------------------------------------------\n";
-        cout << "INGRESE OPCIÓN: ";
-        cin >> opcion;
-        cout << "-----------------------------------------------\n";
-        cout << "\n";
-        if (opcion == 1) {
-            if (!pathEntrada.empty() && !pathSalida.empty() && !extension.empty()) {
-                procesarArchivos(pathEntrada, pathSalida, extension, cantidadThreads, mapPath, stopPath);
+    if(sinMenu == "1"){
+        if (!pathEntrada.empty() && !pathSalida.empty() && !extension.empty()) {
+                procesarArchivos(pathEntrada, pathSalida, extension, cantidadThreads, mapPath, stopPath, sinMenu);
                 return true;
-            } else {
-                cerr << "Error: No se pudo obtener las variables necesarias.\n";
-                return false;
-            }
-        } else if (opcion == 0) {
-            return false;
-        } else {
-            cerr << "Opción no válida. Intente nuevamente.\n";
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
     }
+    else{
+        while (true) {
+            cout << "------------------ [Contador de palabras con Threads] ------------------\n";
+            cout << "   0 : Salir\n";
+            cout << "   1 : Procesar\n";
+            cout << "-----------------------------------------------\n";
+            cout << "INGRESE OPCIÓN: ";
+            cin >> opcion;
+            cout << "-----------------------------------------------\n";
+            cout << "\n";
+            if (opcion == 1) {
+                if (!pathEntrada.empty() && !pathSalida.empty() && !extension.empty()) {
+                    procesarArchivos(pathEntrada, pathSalida, extension, cantidadThreads, mapPath, stopPath, sinMenu);
+                    return true;
+                } else {
+                    cerr << "Error: No se pudo obtener las variables necesarias.\n";
+                    return false;
+                }
+            } else if (opcion == 0) {
+                return false;
+            } else {
+                cerr << "Opción no válida. Intente nuevamente.\n";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
+        }
+    }
+    return 0;
 }
 
-vector<string> cargarArchivos(const string& directorio, const string& extension, string mapPath) {
+vector<string> cargarArchivos(const string& directorio, const string& extension, string mapPath, string sinMenu) {
     vector<string> archivos;
-    cout << directorio << endl;
     // Verificar si el directorio existe
     if (!fs::exists(directorio) || !fs::is_directory(directorio)) {
         cerr << "Error: El directorio no existe o no es un directorio válido.\n";
@@ -53,11 +61,12 @@ vector<string> cargarArchivos(const string& directorio, const string& extension,
     crearMap(extension, directorio, mapPath,archivos);
 
     // Mostrar la lista de archivos cargados (opcional)
-    cout << "Archivos cargados con extensión '" << extension << "':\n";
-    for (const auto& archivo : archivos) {
-        cout << " - " << archivo << '\n';
+    if(sinMenu != "1") {
+        cout << "Archivos cargados con extensión '" << extension << "':\n";
+        for (const auto& archivo : archivos) {
+            cout << " - " << archivo << '\n';
+        }
     }
-
     return archivos;
 }
 
@@ -157,8 +166,8 @@ void countWordThreads(const vector<string>& archivos, int cantidadThreads, const
 }
 
 
-void procesarArchivos(const string& inputPath, const string& outputPath, const string& extension, int cantidadThreads, string mapPath, string stopPath) {
-    vector<string> archivos = cargarArchivos(inputPath, extension, mapPath);
+void procesarArchivos(const string& inputPath, const string& outputPath, const string& extension, int cantidadThreads, string mapPath, string stopPath, string sinMenu) {
+    vector<string> archivos = cargarArchivos(inputPath, extension, mapPath, sinMenu);
     if (archivos.empty()) {
         cerr << "No se encontraron archivos con la extensión '" << extension << "' en el directorio '" << inputPath << "'.\n";
         return;

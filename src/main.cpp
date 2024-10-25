@@ -41,9 +41,9 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
                 cout << "\nEl número 0 no forma parte del dominio de la función. Operación no válida.\n\n";
             }
         } else if (funcion == 6) {
-            string commandCountWord = "./src/programCountWord/main " + entorno[1] + " "+ entorno[2] + " "+ entorno[3] + " "+ entorno[4] + " " + entorno[5] + " "+ entorno[6];
+            string commandCountWord = "./src/programCountWord/main " + entorno[1] + " "+ entorno[2] + " "+ entorno[3] + " "+ entorno[4] + " " + entorno[5] + " "+ entorno[6] + " " + "0";
             int result = system(commandCountWord.c_str());
-            if (WIFEXITED(result)) { // Verificamos si el programa terminó correctamente
+            if (WIFEXITED(result)) { 
                 exitStatus = WEXITSTATUS(result);
             }
         } else if (funcion == 7) {
@@ -52,11 +52,16 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
                 int result = system(commandIndex.c_str());
             }
             else cerr << "ERROR: no se puede crear índice invertido sin haber ejecutado la opción 6." << endl;
-        } else if (funcion == 8 && rol == "Admin") {
-            ingresarUsuario(users, entorno[0]);
-        } else if (funcion == 9 && rol == "Admin") {
-            listarUsuarios(users);
+        } else if (funcion == 8) {
+            string commandEjecutor = "./src/ejecutador/main " + entorno[1] + " " + entorno[2] + " " + entorno[3] + " " + entorno[8] + " " + entorno[5] + " " + entorno[6] + " " + entorno[9] + " " + entorno[10];
+            int result = system(commandEjecutor.c_str());
+            string commandAnalisis = "python3 ./src/analizador.py "+ entorno[10] + " " + entorno[11];
+            int analize = system(commandAnalisis.c_str());
         } else if (funcion == 10 && rol == "Admin") {
+            ingresarUsuario(users, entorno[0]);
+        } else if (funcion == 11 && rol == "Admin") {
+            listarUsuarios(users);
+        } else if (funcion == 12 && rol == "Admin") {
             eliminarUsuarios(users, entorno[0]);
         } else {
             cout << "----------------" << endl;
@@ -74,10 +79,12 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
         cout << "    5 : Calcular f(x) = 5x*x + (1/x)\n";
         cout << "    6 : Contar Palabras\n";
         cout << "    7 : Crea índice invertido." << endl;
+        cout << "    8 : Análisis de Performance." << endl;
+        cout << "    9 : Planificador." << endl;
         if (rol == "Admin") {
-            cout << "    8 : Ingresar Usuarios\n";
-            cout << "    9 : Listar Usuarios\n";
-            cout << "    10 : Eliminar Usuarios\n";
+            cout << "    10 : Ingresar Usuarios\n";
+            cout << "    11 : Listar Usuarios\n";
+            cout << "    12 : Eliminar Usuarios\n";
         }
         cout << "------------------------------------------------\n";
 
