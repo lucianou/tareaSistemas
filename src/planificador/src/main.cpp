@@ -11,7 +11,7 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-
+    loadEnv("../../.env");
     cout << "-------- [Planificador de operaciones] --------\n\n";
     planificador();
     cout << "-----------------------------------------------\n\n";
