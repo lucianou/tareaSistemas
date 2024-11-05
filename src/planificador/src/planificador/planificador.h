@@ -7,9 +7,10 @@
 #include <cstdlib>
 #include <unistd.h>
 
-
 using namespace std;
 
-void planificador();
+void planificador();                                    // Función principal del planificador
+bool validarFormatoMensaje(const string& mensaje);      // Función para validar el formato del mensaje
+void loadEnv(const std::string& filename);              // Función para cargar las variables de entorno
 
 #endif
