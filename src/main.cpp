@@ -57,6 +57,15 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
             int result = system(commandEjecutor.c_str());
             string commandAnalisis = "python3 ./src/analizador.py "+ entorno[10] + " " + entorno[11];
             int analize = system(commandAnalisis.c_str());
+        } else if (funcion == 9) {
+            string commandPlanificador = "./src/planificador/main";  
+            int result = system(commandPlanificador.c_str());
+            if (WIFEXITED(result)) {
+                exitStatus = WEXITSTATUS(result);
+                cout << "Planificador ejecutado con éxito. Estado de salida: " << exitStatus << endl;
+            } else {
+                cerr << "ERROR: Fallo al ejecutar el Planificador." << endl;
+            }
         } else if (funcion == 10 && rol == "Admin") {
             ingresarUsuario(users, entorno[0]);
         } else if (funcion == 11 && rol == "Admin") {
@@ -78,9 +87,9 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
         cout << "    4 : Promedio y sumatoria de un vector\n";
         cout << "    5 : Calcular f(x) = 5x*x + (1/x)\n";
         cout << "    6 : Contar Palabras\n";
-        cout << "    7 : Crea índice invertido." << endl;
-        cout << "    8 : Análisis de Performance." << endl;
-        cout << "    9 : Planificador." << endl;
+        cout << "    7 : Crea índice invertido" << endl;
+        cout << "    8 : Análisis de Performance" << endl;
+        cout << "    9 : Planificador" << endl;
         if (rol == "Admin") {
             cout << "    10 : Ingresar Usuarios\n";
             cout << "    11 : Listar Usuarios\n";
