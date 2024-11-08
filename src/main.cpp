@@ -77,7 +77,7 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
             int result1 = system(commandBuscador.c_str());
             string commandCache = "./src/cache/main " + entorno[15];
             int result2 = system(commandCache.c_str());
-            string commandSearchEngine = "./src/searchEngine/main " + entorno[7];
+            string commandSearchEngine = "./src/searchEngine/main " + entorno[7] + " " + entorno[16];
             int result3 = system(commandSearchEngine.c_str());
         } else {
             cout << "----------------" << endl;
