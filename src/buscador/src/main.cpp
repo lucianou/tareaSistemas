@@ -1,12 +1,13 @@
 #include "buscador.h"
 
 int main(int argc, char* argv[]) {
-    if (argc < 3) { // Ajusta según el número de argumentos que esperes
+    if (argc < 2) { 
         cerr << "ERROR: Parámetros insuficientes en la ejecución de planificador.\n";
         return 1;
     }
+    string rutaMapa = argv[1];  
 
-    if (!rutaMapa) {
+    if (rutaMapa.empty()) {
         cerr << "Error: MAPA_ARCHIVOS no está configurado como variable de entorno.\n";
         return 1;
     }
