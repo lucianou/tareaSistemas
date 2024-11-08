@@ -74,7 +74,11 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
             eliminarUsuarios(users, entorno[0]);
         } else if (funcion == 20) {
             string commandBuscador = "./src/buscador/main " + entorno[5];
-            int result = system(commandBuscador.c_str());
+            int result1 = system(commandBuscador.c_str());
+            string commandCache = "./src/cache/main " + entorno[15];
+            int result2 = system(commandCache.c_str());
+            string commandSearchEngine = "./src/searchEngine/main " + entorno[7];
+            int result3 = system(commandSearchEngine.c_str());
         } else {
             cout << "----------------" << endl;
         }
