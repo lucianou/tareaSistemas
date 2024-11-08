@@ -2,14 +2,16 @@
 #define PLANIFICADOR_H
 
 #include <iostream>
-#include <fstream>
-#include <string>
 #include <cstdlib>
+#include <vector>
+#include <cstring>
 #include <unistd.h>
+#include <string>
+#include <fstream>
 
 using namespace std;
 
-void planificador();                                    // Función principal del planificador
+void planificador(const string& procesosPathStr, int cantidadCores, const string& resultadosPathStr);                                    // Función principal del planificador
 bool validarFormatoMensaje(const string& mensaje);      // Función para validar el formato del mensaje
 void loadEnv(const std::string& filename);              // Función para cargar las variables de entorno
 
