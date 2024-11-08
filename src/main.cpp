@@ -76,9 +76,8 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
             cout << "----------------" << endl;
         }
 
-        cout << "###################################\n\n";
+        cout << "###############################################\n\n";
 
-        // Mostrar menú
         cout << "-------------- [Menú de opciones] -------------\n";
         cout << "    0 : Salir\n";
         cout << "    1 : Detección de palíndromo\n";
@@ -87,9 +86,10 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
         cout << "    4 : Promedio y sumatoria de un vector\n";
         cout << "    5 : Calcular f(x) = 5x*x + (1/x)\n";
         cout << "    6 : Contar Palabras\n";
-        cout << "    7 : Crea índice invertido" << endl;
-        cout << "    8 : Análisis de Performance" << endl;
-        cout << "    9 : Planificador" << endl;
+        cout << "    7 : Crea índice invertido\n";
+        cout << "    8 : Análisis de Performance\n";
+        cout << "    9 : Planificador\n";
+        cout << "    20 : Buscador\n";
         if (rol == "Admin") {
             cout << "    10 : Ingresar Usuarios\n";
             cout << "    11 : Listar Usuarios\n";
