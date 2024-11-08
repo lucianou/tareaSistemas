@@ -1,37 +1,61 @@
 #include "planificador.h"
 
-void planificador() {
-    string procesosPath = getenv("PROCESOS") ? getenv("PROCESOS") : "procesos.txt";
-    cout << "Ruta de archivo de procesos: " << procesosPath << endl;
-
-    ifstream file(procesosPath);
-    if (!file) {
-        cerr << "ERROR: No se pudo abrir el archivo de procesos." << endl;
+void planificador(const string& procesosPathStr, int cantidadCores, const string& resultadosPathStr) {
+    
+    // Verificar la existencia del archivo de procesos
+    ifstream file(procesosPathStr);
+    if (!file.is_open()) {
+        cerr << "ERROR: No se pudo abrir el archivo de procesos en " << procesosPathStr << endl;
         return;
     }
 
-    int coreId = 0; 
     string line;
-
+    int coreId = 0;
+     
+        // Procesar cada línea del archivo de procesos
     while (getline(file, line)) {
+        // Formatear el mensaje para cada línea del archivo de procesos
         string mensaje = "(" + to_string(coreId) + ":" + line + ")";  
         
         if (validarFormatoMensaje(mensaje)) {
             cout << "Mensaje válido, enviando a DISTRIBUIDOR: " << mensaje << endl;
             string command = "./distribuidor '" + mensaje + "'";
-            system(command.c_str());
+
+            // Verificar si el programa "distribuidor" existe en la ruta actual
+            if (access("./distribuidor", X_OK) == -1) {
+                cerr << "ERROR: No se encontró el ejecutable 'distribuidor' en la ruta actual o no tiene permisos de ejecución.\n";
+                return;
+            }
+
+            // Ejecutar el comando del distribuidor
+            int result = system(command.c_str());
+            if (result != 0) {
+                cerr << "ERROR: Falló la ejecución del comando '" << command << "'.\n";
+            }
         } else {
             cerr << "ERROR: Formato de mensaje no válido. Mensaje: " << mensaje << endl;
         }
         
-        coreId = (coreId + 1) % 2;  // Alternar entre los COREs disponibles
+        // Alternar entre los cores disponibles
+        coreId = (coreId + 1) % cantidadCores;
     }
 
     file.close();
-    cout << "Ruta de archivo de resultados: resultados.txt" << endl;
+
+    // Guardar los resultados en el archivo especificado
+    ofstream resultadosFile(resultadosPathStr);
+    if (!resultadosFile.is_open()) {
+        cerr << "ERROR: No se pudo abrir el archivo de resultados en " << resultadosPathStr << endl;
+        return;
+    }
+    resultadosFile << "Resultados del planificador\n"; // Aquí puedes escribir los resultados deseados
+    resultadosFile.close();
+
+    cout << "Planificación completada. Resultados guardados en: " << resultadosPathStr << "\n";
     cout << "Presione una tecla para continuar..." << endl;
-    cin.get();     
+    cin.get();
 }
+
 
 bool validarFormatoMensaje(const string& mensaje) { // Validación básica: el mensaje debe tener paréntesis, dos puntos, punto y coma, y coma
     return mensaje[0] == '(' && mensaje.find(":") != string::npos &&
@@ -39,28 +63,20 @@ bool validarFormatoMensaje(const string& mensaje) { // Validación básica: el m
            mensaje.back() == ')';
 }
 
-void loadEnv(const string& filename) {
-    ifstream file(filename);
-    if (!file) {
-        file.open("../.env");  // Otra posible ruta
-    }
+void loadEnv(const string &envPath = "./.env") {
+    ifstream file(envPath);
     if (!file) {
         cerr << "ERROR: No se pudo abrir el archivo de configuración .env." << endl;
         return;
     }
     string line;
     while (getline(file, line)) {
-        // Ignorar líneas en blanco o comentarios
-        if (line.empty() || line[0] == '#') continue;
-
-        // Buscar el delimitador '='
-        size_t delimiterPos = line.find('=');
+        auto delimiterPos = line.find("=");
         if (delimiterPos != string::npos) {
             string key = line.substr(0, delimiterPos);
             string value = line.substr(delimiterPos + 1);
-
-            // Establecer la variable de entorno
-            setenv(key.c_str(), value.c_str(), 1); // '1' para sobrescribir si ya existe
+            setenv(key.c_str(), value.c_str(), 1);  // Setea variables de entorno
         }
     }
+    file.close();
 }
