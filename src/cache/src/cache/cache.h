@@ -9,19 +9,18 @@
 #include <cstdlib>
 #include <map>
 #include <queue>
+#include <string>
+#include <ctime>
 
 #define PORT 2020 
 
 using namespace std;
 
-map<string, string> cacheMap;  
-queue<string> cacheQueue;      
-
-struct CacheEntry {
-    string query;
-    string response;
-};
+extern map<string, string> cacheMap;  // Declaración externa
+extern queue<string> cacheQueue;      // Declaración externa
 
 void iniciarCache(int memory_size);
+void manejarConexion(int new_socket, int memory_size);
+string consultarMotorDeBusqueda(const string &query);
 
 #endif
