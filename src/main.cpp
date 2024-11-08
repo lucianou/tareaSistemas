@@ -72,6 +72,9 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
             listarUsuarios(users);
         } else if (funcion == 12 && rol == "Admin") {
             eliminarUsuarios(users, entorno[0]);
+        } else if (funcion == 20) {
+            string commandBuscador = "./src/buscador/main " + entorno[15];
+            int result = system(commandBuscador.c_str());
         } else {
             cout << "----------------" << endl;
         }
@@ -89,18 +92,18 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
         cout << "    7 : Crea índice invertido\n";
         cout << "    8 : Análisis de Performance\n";
         cout << "    9 : Planificador\n";
-        cout << "    20 : Buscador\n";
         if (rol == "Admin") {
             cout << "    10 : Ingresar Usuarios\n";
             cout << "    11 : Listar Usuarios\n";
             cout << "    12 : Eliminar Usuarios\n";
         }
+        cout << "    20 : Buscador\n";
         cout << "------------------------------------------------\n";
 
         // Solicitar opción
         cout << "INGRESE OPCIÓN: ";
         cin >> funcion;
-        while (cin.fail() || funcion < 0 || (rol != "Admin" && funcion > 7) || (rol == "Admin" && funcion > 10)) {
+        while (cin.fail() || funcion < 0 || (rol != "Admin" && funcion > 7) || (rol == "Admin" && funcion > 20)) {
             cerr << "ERROR: Ingrese un número válido: ";
             cin.clear();
             cin.ignore(1000, '\n');
