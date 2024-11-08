@@ -73,7 +73,7 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
         } else if (funcion == 12 && rol == "Admin") {
             eliminarUsuarios(users, entorno[0]);
         } else if (funcion == 20) {
-            string commandBuscador = "./src/buscador/main " + entorno[15];
+            string commandBuscador = "./src/buscador/main " + entorno[5];
             int result = system(commandBuscador.c_str());
         } else {
             cout << "----------------" << endl;
