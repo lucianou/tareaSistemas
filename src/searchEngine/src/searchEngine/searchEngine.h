@@ -2,24 +2,32 @@
 #define SEARCHENGINE_H
 
 #include <iostream>
-#include <string>
-#include <map>
-#include <vector>
-#include <algorithm>
+#include <cstring>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <cstdlib>
 #include <fstream>
 #include <sstream>
-#include <cstdlib>
+#include <vector>
+#include <map>
+#include <algorithm>
+
+#define PORT 2021
 
 using namespace std;
 
 struct Document {
-    string name;
-    int score;
+    string name; // Nombre del documento
+    int score;   // Puntuación asociada
 };
 
-void iniciarMotorBusqueda(string indexPath);
+extern map<string, vector<Document>> invertedIndex;  // Índice invertido
+
+void iniciarMotorBusqueda(const string& indexPath, int topK);
 void cargarIndiceInvertido(const string& indexPath);
-vector<Document> buscar(const vector<string>& queryWords);
+vector<Document> buscar(const vector<string>& queryWords, int topK);
+void procesarConsulta(int client_socket, int topK);
+void iniciarServidorBusqueda(int topK);
 
-
-#endif
+#endif 
