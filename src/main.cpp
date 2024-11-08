@@ -107,7 +107,7 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
         // Solicitar opción
         cout << "INGRESE OPCIÓN: ";
         cin >> funcion;
-        while (cin.fail() || funcion < 0 || (rol != "Admin" && funcion > 7) || (rol == "Admin" && funcion > 20)) {
+         while (cin.fail() || (rol != "Admin" && (funcion < 0 || (funcion > 9 && funcion != 20))) || (rol == "Admin" && (funcion < 0 || (funcion > 12 && funcion != 20)))) {
             cerr << "ERROR: Ingrese un número válido: ";
             cin.clear();
             cin.ignore(1000, '\n');
