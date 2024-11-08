@@ -57,19 +57,34 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
             int result = system(commandEjecutor.c_str());
             string commandAnalisis = "python3 ./src/analizador.py "+ entorno[10] + " " + entorno[11];
             int analize = system(commandAnalisis.c_str());
+        } else if (funcion == 9) {
+            string commandPlanificador = "./src/planificador/main";  
+            int result = system(commandPlanificador.c_str());
+            if (WIFEXITED(result)) {
+                exitStatus = WEXITSTATUS(result);
+                cout << "Planificador ejecutado con éxito. Estado de salida: " << exitStatus << endl;
+            } else {
+                cerr << "ERROR: Fallo al ejecutar el Planificador." << endl;
+            }
         } else if (funcion == 10 && rol == "Admin") {
             ingresarUsuario(users, entorno[0]);
         } else if (funcion == 11 && rol == "Admin") {
             listarUsuarios(users);
         } else if (funcion == 12 && rol == "Admin") {
             eliminarUsuarios(users, entorno[0]);
+        } else if (funcion == 20) {
+            string commandBuscador = "./src/buscador/main " + entorno[5];
+            int result1 = system(commandBuscador.c_str());
+            string commandCache = "./src/cache/main " + entorno[15];
+            int result2 = system(commandCache.c_str());
+            string commandSearchEngine = "./src/searchEngine/main " + entorno[7] + " " + entorno[16];
+            int result3 = system(commandSearchEngine.c_str());
         } else {
             cout << "----------------" << endl;
         }
 
-        cout << "###################################\n\n";
+        cout << "###############################################\n\n";
 
-        // Mostrar menú
         cout << "-------------- [Menú de opciones] -------------\n";
         cout << "    0 : Salir\n";
         cout << "    1 : Detección de palíndromo\n";
@@ -78,20 +93,21 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
         cout << "    4 : Promedio y sumatoria de un vector\n";
         cout << "    5 : Calcular f(x) = 5x*x + (1/x)\n";
         cout << "    6 : Contar Palabras\n";
-        cout << "    7 : Crea índice invertido." << endl;
-        cout << "    8 : Análisis de Performance." << endl;
-        cout << "    9 : Planificador." << endl;
+        cout << "    7 : Crea índice invertido\n";
+        cout << "    8 : Análisis de Performance\n";
+        cout << "    9 : Planificador\n";
         if (rol == "Admin") {
             cout << "    10 : Ingresar Usuarios\n";
             cout << "    11 : Listar Usuarios\n";
             cout << "    12 : Eliminar Usuarios\n";
         }
+        cout << "    20 : Buscador\n";
         cout << "------------------------------------------------\n";
 
         // Solicitar opción
         cout << "INGRESE OPCIÓN: ";
         cin >> funcion;
-        while (cin.fail() || funcion < 0 || (rol != "Admin" && funcion > 7) || (rol == "Admin" && funcion > 10)) {
+         while (cin.fail() || (rol != "Admin" && (funcion < 0 || (funcion > 9 && funcion != 20))) || (rol == "Admin" && (funcion < 0 || (funcion > 12 && funcion != 20)))) {
             cerr << "ERROR: Ingrese un número válido: ";
             cin.clear();
             cin.ignore(1000, '\n');

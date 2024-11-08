@@ -1,13 +1,13 @@
 # Variables
 CXX = g++
-CXXFLAGS = -std=c++17 -Isrc/core
+CXXFLAGS = -std=c++17 -Isrc/searchEngine
 OBJDIR = obj
 SRCDIR = src
 TARGET = main
 
 # Archivos fuente y objeto
-SRCS = $(SRCDIR)/main.cpp $(SRCDIR)/core/core.cpp
-OBJS = $(OBJDIR)/main.o $(OBJDIR)/core.o
+SRCS = $(SRCDIR)/main.cpp $(SRCDIR)/searchEngine/searchEngine.cpp
+OBJS = $(OBJDIR)/main.o $(OBJDIR)/searchEngine.o
 
 # Regla por defecto
 all: $(OBJDIR) $(TARGET)
@@ -21,8 +21,8 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Regla para compilar el core
-$(OBJDIR)/core.o: $(SRCDIR)/core/core.cpp
-	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/core/core.cpp -o $@
+$(OBJDIR)/searchEngine.o: $(SRCDIR)/searchEngine/searchEngine.cpp
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/searchEngine/searchEngine.cpp -o $@
 
 # Limpieza de archivos binarios y objeto
 clean:
