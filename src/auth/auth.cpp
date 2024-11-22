@@ -1,11 +1,4 @@
-#include <fstream>
-#include <string>
-#include <iostream>
-#include <algorithm>  // Necesario para std::remove_if
-#include <sstream>
 #include "auth.h"
-#include "text.h"
-#include <cstring>
 
 using namespace std;
 
@@ -264,4 +257,10 @@ int contarLineas(const string& nombreArchivo) {
     }
     archivo.close();
     return contador;
+}
+
+void ejecutarProceso(const string& comando) {
+    thread([comando]() {
+        system(comando.c_str());
+    }).detach();
 }

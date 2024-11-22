@@ -16,6 +16,7 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
     int funcion = -1;
     pid_t pid = getpid();  // Obtener el PID del proceso padre
     int exitStatus = 0;
+    
 
     while (funcion != 0) {
         cout << "\nSISTEMA @@@@ (PID = " << pid << ")" << endl;
@@ -58,7 +59,7 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
             string commandAnalisis = "python3 ./src/analizador.py "+ entorno[10] + " " + entorno[11];
             int analize = system(commandAnalisis.c_str());
         } else if (funcion == 9) {
-            string commandPlanificador = "./src/planificador/main";  
+            string commandPlanificador = "./src/planificador/main " + entorno[12]+ " " + entorno[13] + " " + entorno[14];  
             int result = system(commandPlanificador.c_str());
             if (WIFEXITED(result)) {
                 exitStatus = WEXITSTATUS(result);
@@ -73,12 +74,8 @@ void mostrarMenu(string user, string rol, string frase, vector<int> nums, int nu
         } else if (funcion == 12 && rol == "Admin") {
             eliminarUsuarios(users, entorno[0]);
         } else if (funcion == 20) {
-            string commandBuscador = "./src/buscador/main " + entorno[5];
+            string commandBuscador = "./src/buscador/main " + entorno[5] + " " + entorno[17] + " " + entorno[18];
             int result1 = system(commandBuscador.c_str());
-            string commandCache = "./src/cache/main " + entorno[15];
-            int result2 = system(commandCache.c_str());
-            string commandSearchEngine = "./src/searchEngine/main " + entorno[7] + " " + entorno[16];
-            int result3 = system(commandSearchEngine.c_str());
         } else {
             cout << "----------------" << endl;
         }
@@ -129,6 +126,11 @@ int main(int argc, char *argv[]) {
     string username;
     string pass;
 
+    string commandCache = "./src/cache/main " + entorno[15] + " " + entorno[17];
+    string commandSearchEngine = "./src/searchEngine/main " + entorno[7] + " " + entorno[16] + " " + entorno[18] ;
+    ejecutarProceso(commandCache);
+    ejecutarProceso(commandSearchEngine);
+    
     if (argc != 11) {
         cerr << "Error: Ingrese todos los parámetros necesarios. La entrada debería ser ./trabajo1 -u nombre -p contraseña -t frase -v vector -n numero\n";
         return 0;
@@ -183,7 +185,7 @@ int main(int argc, char *argv[]) {
         cerr << "Error: Los datos de usuario son incorrectos.\n";
         return 1;
     }
-
+    
     mostrarMenu(username, users[userIndex].rol, frase, numeros, num, dnum, users, entorno);
     cout << "----------------- [Saliendo...] ----------------" << endl;
     return 1;

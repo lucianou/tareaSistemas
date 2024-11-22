@@ -8,8 +8,9 @@ int main(int argc, char* argv[]) {
 
     string indexPath = argv[1];            // Ruta del archivo de índice invertido
     int topK = atoi(argv[2]);              // Número de resultados a devolver
-    
-    iniciarMotorBusqueda(indexPath, topK);
+    int PORT = stoi(argv[3]);
+
+    iniciarServidorBusqueda(topK, PORT, indexPath);
 
     return EXIT_SUCCESS;
 }

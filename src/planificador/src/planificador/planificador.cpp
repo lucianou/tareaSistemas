@@ -19,10 +19,10 @@ void planificador(const string& procesosPathStr, int cantidadCores, const string
         
         if (validarFormatoMensaje(mensaje)) {
             cout << "Mensaje válido, enviando a DISTRIBUIDOR: " << mensaje << endl;
-            string command = "./distribuidor '" + mensaje + "'";
+            string command = "../../src/distribuidor/main " + mensaje;
 
             // Verificar si el programa "distribuidor" existe en la ruta actual
-            if (access("./distribuidor", X_OK) == -1) {
+            if (access("./src/distribuidor/main", X_OK) == -1) {
                 cerr << "ERROR: No se encontró el ejecutable 'distribuidor' en la ruta actual o no tiene permisos de ejecución.\n";
                 return;
             }

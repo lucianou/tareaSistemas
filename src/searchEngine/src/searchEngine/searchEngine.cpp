@@ -78,19 +78,24 @@ void procesarConsulta(int client_socket, int topK) {
     send(client_socket, respuesta.c_str(), respuesta.size(), 0);
 }
 
-void iniciarServidorBusqueda(int topK) {
+void iniciarServidorBusqueda(int topK, int PORT, const string& indexPath) {
     int server_fd, new_socket;
     struct sockaddr_in address;
     int addrlen = sizeof(address);
     char buffer[1024] = {0};
 
-    // Crear socket
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
-        perror("Socket fallido");
+    perror("Socket fallido");
+    exit(EXIT_FAILURE);
+}
+
+    // Permitir reutilizar el puerto
+    int opt = 1;
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)) < 0) {
+        perror("setsockopt failed");
         exit(EXIT_FAILURE);
     }
 
-    // Configuración de la dirección
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(PORT);
@@ -147,9 +152,8 @@ void iniciarServidorBusqueda(int topK) {
 void iniciarMotorBusqueda(const string& indexPath, int topK) {
     cargarIndiceInvertido(indexPath);
 
-    // Procesar la entrada de búsqueda
-    cout << "Ingrese la consulta de búsqueda: ";
     string queryLine;
+    /*
     getline(cin, queryLine);
 
     istringstream queryStream(queryLine);
@@ -166,4 +170,5 @@ void iniciarMotorBusqueda(const string& indexPath, int topK) {
     for (const auto& doc : resultados) {
         cout << "Documento: " << doc.name << " | Puntaje: " << doc.score << endl;
     }
+    */
 }

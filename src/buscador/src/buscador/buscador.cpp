@@ -16,7 +16,20 @@ map<string, string> cargarMapaArchivos(const string& ruta) {
 }
 
 // Función para enviar mensajes a CACHE y MOTOR DE BÚSQUEDA
-void enviarMensaje(const string& destino, const string& mensaje) {
+void enviarMensaje(const string& destino, const string& mensaje, int clientSocket) {
     cout << "Enviando mensaje a " << destino << ": " << mensaje << endl;
-    // Aquí puedes implementar la lógica para enviar el mensaje al proceso correspondiente
+    send(clientSocket, mensaje.c_str(), mensaje.length(), 0);
+
 }
+
+string enMinusculas(string frase){
+    string fraseMin = "";
+    for(char c: frase){
+        fraseMin += tolower(c);
+    }
+    return fraseMin;
+}
+
+
+
+

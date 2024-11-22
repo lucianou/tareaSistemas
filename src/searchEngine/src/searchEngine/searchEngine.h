@@ -13,8 +13,6 @@
 #include <map>
 #include <algorithm>
 
-#define PORT 2021
-
 using namespace std;
 
 struct Document {
@@ -28,6 +26,6 @@ void iniciarMotorBusqueda(const string& indexPath, int topK);
 void cargarIndiceInvertido(const string& indexPath);
 vector<Document> buscar(const vector<string>& queryWords, int topK);
 void procesarConsulta(int client_socket, int topK);
-void iniciarServidorBusqueda(int topK);
+void iniciarServidorBusqueda(int topK, int PORT, const string& indexPath);
 
 #endif 

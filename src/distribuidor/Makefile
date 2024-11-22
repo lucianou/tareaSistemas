@@ -27,7 +27,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 
 # Regla para compilar archivos fuente en objetos dentro de subdirectorios
 $(OBJDIR)/distribuidor.o: $(SRCDIR)/distribuidor/distribuidor.cpp
-	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/distribuidor/distribuidor,cpp -o $@
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/distribuidor/distribuidor.cpp -o $@
 
 # Limpieza de archivos binarios y objeto
 clean:

@@ -3,21 +3,27 @@
 map<string, string> cacheMap;  // Definición real
 queue<string> cacheQueue;      // Definición real
 
-void iniciarCache(int memory_size) {
-    // Crear el socket para el servidor
+void iniciarCache(int memory_size, int PORT ) {
     int server_fd, new_socket;
     struct sockaddr_in address;
     int addrlen = sizeof(address);
 
-    // Crear el socket TCP
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
-        perror("socket failed");
+    perror("socket failed");
+    exit(EXIT_FAILURE);
+}
+
+    // Permitir reutilizar el puerto
+    int opt = 1;
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)) < 0) {
+        perror("setsockopt failed");
         exit(EXIT_FAILURE);
     }
 
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY; 
     address.sin_port = htons(PORT);
+
 
     // Enlazar el socket a la dirección y puerto
     if (bind(server_fd, (struct sockaddr*)&address, sizeof(address)) < 0) {
