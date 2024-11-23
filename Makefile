@@ -4,7 +4,7 @@ CXXFLAGS = -std=c++17 -I$(SRCDIR)/numeric -I$(SRCDIR)/text -I$(SRCDIR)/auth
 OBJDIR = obj
 BINDIR = .
 SRCDIR = src
-TARGETS = main
+TARGETS = $(BINDIR)/main
 
 # Archivos fuente
 SRCS = $(SRCDIR)/main.cpp \
@@ -21,7 +21,7 @@ OBJS_MAIN = $(OBJDIR)/main.o \
 # Regla por defecto
 all: $(BINDIR) $(OBJDIR) $(TARGETS)
 
-# Regla para crear el ejecutable 'main'
+# Regla para crear el ejecutable 'main' en $(BINDIR)
 $(BINDIR)/main: $(OBJS_MAIN)
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJS_MAIN)
 
@@ -30,15 +30,11 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@mkdir -p $(dir $@) # Crear el subdirectorio en obj si no existe
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-./main: $(OBJS_MAIN)
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJS_MAIN)
-
 # Limpiar archivos generados
 clean:
 	@echo "[CLN] Removing binary and object files"
-	@rm -f $(BINDIR)/main  	#Elimina solo el binario
-	@rm -f $(OBJDIR)/*.o    #Elimina solo los archivos .o, no el contenido completo del directorio
-
+	@rm -f $(BINDIR)/main  	# Elimina solo el binario
+	@rm -f $(OBJDIR)/*.o       # Elimina solo los archivos .o, no el contenido completo del directorio
 
 # Reglas para crear directorios si no existen
 $(OBJDIR):
