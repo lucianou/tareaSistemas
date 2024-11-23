@@ -1,32 +1,45 @@
 #include "core.h"
 
-// Función que convierte una cadena de texto a una operación del enum
-Operacion obtenerOperacion(const string& operacionStr) {
-    if (operacionStr == "suma") return Operacion::SUMA;
-    if (operacionStr == "resta") return Operacion::RESTA;
-    if (operacionStr == "multiplicacion") return Operacion::MULTIPLICACION;
-    if (operacionStr == "division") return Operacion::DIVISION;
-    return Operacion::INVALIDA;
+// Función para realizar operaciones matemáticas
+double realizar_operacion(const string& operacion, double num1, double num2) {
+    if (operacion == "suma") {
+        return num1 + num2;
+    } else if (operacion == "resta") {
+        return num1 - num2;
+    } else if (operacion == "multiplicacion") {
+        return num1 * num2;
+    } else if (operacion == "division") {
+        if (num2 != 0) {
+            return num1 / num2;
+        } else {
+            cerr << "Error: División por cero" << endl;
+            return 0;
+        }
+    } else {
+        cerr << "Operación no soportada" << endl;
+        return 0;
+    }
 }
 
-// Función principal que realiza el cálculo según la operación
-double calcular(Operacion operacion, double num1, double num2) {
-    switch (operacion) {
-        case Operacion::SUMA:
-            return num1 + num2;
-        case Operacion::RESTA:
-            return num1 - num2;
-        case Operacion::MULTIPLICACION:
-            return num1 * num2;
-        case Operacion::DIVISION:
-            if (num2 != 0) {
-                return num1 / num2;
-            } else {
-                cerr << "ERROR: División por cero." << endl;
-                return 0;  // o algún valor de error
-            }
-        default:
-            cerr << "ERROR: Operación no válida." << endl;
-            return 0;
-    }
+// Función que procesa el mensaje recibido
+void realizar_calculo(const string& mensaje) {
+    stringstream ss(mensaje);
+    string id, operacion, valores;
+    double num1, num2;
+
+    // Extraemos los componentes del mensaje
+    getline(ss, id, ';');
+    getline(ss, operacion, ';');
+    getline(ss, valores, ';');
+
+    // Convertimos los valores a números
+    stringstream valStream(valores);
+    char coma;  // Para leer la coma entre los dos números
+    valStream >> num1 >> coma >> num2;
+
+    // Realizamos la operación
+    double resultado = realizar_operacion(operacion, num1, num2);
+
+    // Formateamos y mostramos el resultado
+    cout << id << ";" << operacion << ";" << num1 << "," << num2 << " => " << resultado << endl;
 }
