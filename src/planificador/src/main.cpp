@@ -3,6 +3,9 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
+    // Depuración: Imprime directorio actual y verifica argumentos
+    cout << "Directorio actual: " << getcwd(NULL, 0) << endl;
+
     if (argc < 4) { // Ajusta según el número de argumentos que esperes
         cerr << "ERROR: Parámetros insuficientes en la ejecución de planificador.\n";
         return 1;
@@ -16,6 +19,15 @@ int main(int argc, char* argv[]) {
     cout << "Ruta de PROCESOS: " << procesos << endl;
     cout << "CANTIDAD_CORES: " << cantidadCores << endl;
     cout << "Ruta de RESULTADOS: " << resultados << endl;
+
+    // Depuración: Verificar si el archivo de procesos existe y es accesible
+    ifstream archivo(procesos);
+    if (!archivo.is_open()) {
+        cerr << "ERROR: No se pudo abrir el archivo " << procesos << endl;
+        return 1;
+    } else {
+        cout << "Archivo " << procesos << " abierto con éxito." << endl;
+    }
 
     cout << "-------- [Planificador de operaciones] --------\n\n";
     planificador(procesos, cantidadCores, resultados);
