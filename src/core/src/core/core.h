@@ -9,18 +9,11 @@
 #include <unistd.h>
 #include <string>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 
-enum class Operacion {
-    SUMA,
-    RESTA,
-    MULTIPLICACION,
-    DIVISION,
-    INVALIDA  
-}; 
-
-double calcular(Operacion operacion, double num1, double num2);
-Operacion obtenerOperacion(const string& operacionStr);
+double realizar_operacion(const string& operacion, double num1, double num2);
+void realizar_calculo(const string& mensaje);
 
 #endif
