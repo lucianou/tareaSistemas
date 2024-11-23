@@ -2,13 +2,17 @@
 #define DISTRIBUTOR_H
 
 #include <iostream>
-#include <map>
-#include <string>
 #include <cstdlib>
+#include <cstring>
+#include <unistd.h>
+#include <string>
 #include <fstream>
+#include <iostream>
+#include <sstream>
+#include <vector>
 
 using namespace std;
 
-void distribuidor(string mensaje);
+void procesarMensaje(const string& mensaje);
 
 #endif
